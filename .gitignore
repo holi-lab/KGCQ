@@ -15,16 +15,7 @@ data/dialogues/
 data/hg_softlabel/
 data/retriever/
 data/oog/
-data/human_eval/simulator_eval/to_eval_by_turn.json
-data/human_eval/hallucination_eval/eval_set.json
-data/human_eval/hallucination_eval/eval_set_map.json
-data/human_eval/hallucination_eval/strings_en.json
-data/human_eval/hallucination_eval/translations_ko.json
-data/human_eval/hallucination_eval/hallucination_annotations_per_turn.csv
-data/human_eval/hallucination_eval/hallucination_flagged_turns.csv
-data/human_eval/dialogue_review/selected_dialogues.json
-data/human_eval/dialogue_review/_ko_translations.json
-data/human_eval/dialogue_review/_unique_lines.json
+data/human_eval/
 results/main/*/dialog.json
 results/main/*/dialog_anal.json
 results/oog/pipeline/*_results.json

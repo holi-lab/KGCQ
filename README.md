@@ -102,7 +102,6 @@ scripts/
   5_eval/          per-run analysis, HG standalone recall, figures, table collection
   baselines/       SapBERT retriever HG, adapted Chain-of-Diagnosis
   oog/             out-of-graph study ("Other" node, KG augmentation)
-  human_eval/      physician studies: statistics and web apps
 results/           aggregated numbers behind the paper's tables
 figure/            framework figure
 ```
@@ -155,7 +154,7 @@ Local layout expected by the scripts (MIMIC-derived):
 | `data/dialogues/hg_{train,valid,test}.json`, `hv_train_valid.json` | synthetic dialogues (HG: 1,371 / 172 / 172 patients; HV: 1,743 patients, 2,154 dialogues) |
 | `data/dialogues/training_subgraph_hv_*.json` | per-patient subgraphs used when generating the HV dialogues |
 | `data/hg_softlabel/{train,valid,test}.json` | truncated histories for the HG: 8,604 / 1,051 / 1,075 rows |
-| `data/retriever/`, `data/oog/`, `data/human_eval/` | retriever baseline inputs, out-of-graph study, physician-study inputs |
+| `data/retriever/`, `data/oog/` | retriever baseline inputs, out-of-graph study |
 
 Profile fields: `age, gender, chiefcomplaint, present_illness_positive/negative, social_history,
 family_medical_history, medical_history, disease, disease_mapped, likelihood_rating, found_symptoms,
@@ -223,8 +222,6 @@ averaged over dialogues and filled only for k >= |gold| (`kgcq/metrics.py`).
 | Table 5, 9-11 (out-of-graph) | `scripts/oog/` | `results/oog/final_tables/`, `relaxed_oog_recall*.csv` |
 | Table 6 (graph statistics) | `data/kg/` | table above |
 | Table 7 (HG methods end-to-end) | `--mode hg_generative`; retriever runs not preserved | `results/main/table7_generative_hg_ft` |
-| Sec. 3.4, 6.3, Table 12 (simulator audit, preference, agreement) | `scripts/human_eval/hallucination_audit.py`, `simulator_preference_stats.py` | `data/human_eval/` |
-| Sec. 6.4 (CQ quality) | `scripts/human_eval/webapp_dialogue_review` | paper only |
 
 `results/main/<row>/metrics.json` holds Recall@1-4 and turns of the run behind each table row (`provenance.txt`
 names the original runs); `results/oog/` the out-of-graph tables; `results/hg_standalone/` the HG test metrics
@@ -286,17 +283,6 @@ subsample; validation 304 + 128. Training sets (`data/oog/train/data_exp{5,6}[_h
 * **Adapted Chain-of-Diagnosis** (`scripts/baselines/cod/cod_cli.py`, Appendix D): the CoD chatbot with its disease
   database rebuilt from our graph (each candidate disease -> its 1-hop attributes in CoD's text format), retrieval
   size 20, confidence threshold 0.5 (0.55 and 0.6 also swept). Needs the CoD model and retriever assets.
-
-### Physician evaluations
-
-| Study | Data | Script |
-|---|---|---|
-| Faithfulness audit of the simulator (45 dialogues, 265 turns, 3 annotators) | `data/human_eval/hallucination_eval/` | `scripts/human_eval/hallucination_audit.py`; web app `webapp_hallucination_audit/` |
-| Simulator realism preference (41 scenarios x 3 physicians; Table 12) | `data/human_eval/simulator_eval/preference_labels.csv` | `simulator_preference_stats.py`; pairs built by `build_simulator_eval_set.py` |
-| CQ quality, interactive Likert study (4 physicians x 5 sessions) | collected on `webapp_dialogue_review/` | `webapp_dialogue_review/aggregate.py` |
-| Free-text review of 10 dialogues (Appendix M.4) | `data/human_eval/dialogue_review/` | `webapp_dialogue_review/select_realistic_dialogues.py` |
-
-Annotators are anonymised. The web apps are Flask apps (`pip install flask`).
 
 ### Known gaps and provenance notes
 
