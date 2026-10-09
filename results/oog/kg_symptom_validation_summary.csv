@@ -1,0 +1,191 @@
+disease,n_profiles,n_notes,n_profiles_train_only,n_kg_sym,n_validated,validation_rate,n_validated_naive,validation_rate_naive,n_real_grounded,n_real_grounded_train_only,n_new_real_not_in_kg
+acute kidney injury,719,719,115,7,7,1.0,7,1.0,278,180,271
+alcohol use disorder,279,279,109,12,10,0.8333,10,0.8333,201,154,191
+coronary artery disease,276,276,87,6,5,0.8333,5,0.8333,204,163,199
+deep vein thrombosis,266,266,111,15,12,0.8,12,0.8,185,146,173
+sepsis,251,251,43,10,10,1.0,10,1.0,210,135,200
+foot ulcer,193,193,93,2,2,1.0,2,1.0,158,121,156
+cutaneous abscess,167,167,78,9,3,0.3333,3,0.3333,162,133,159
+bacteremia,128,128,56,3,3,1.0,3,1.0,175,144,172
+osteomyelitis,123,123,55,7,4,0.5714,4,0.5714,147,115,143
+hiv infection,122,122,42,5,4,0.8,4,0.8,169,119,165
+intra-abdominal abscess,119,119,48,10,9,0.9,9,0.9,131,88,122
+ulcerative colitis,119,119,46,6,6,1.0,6,1.0,166,137,160
+interstitial nephritis,103,103,39,6,6,1.0,6,1.0,156,107,150
+ventral hernia,94,94,44,4,2,0.5,2,0.5,94,71,92
+sickle cell disease,86,86,52,7,6,0.8571,6,0.8571,121,100,115
+acute respiratory failure,79,79,33,7,5,0.7143,5,0.7143,142,110,137
+hydronephrosis,74,74,29,5,4,0.8,4,0.8,125,70,121
+cardiomyopathy,73,73,27,8,8,1.0,8,1.0,135,86,127
+subdural hemorrhage,73,73,35,6,5,0.8333,6,1.0,95,77,90
+anorectal abscess,72,72,35,4,3,0.75,3,0.75,116,94,113
+hepatitis c,68,68,25,5,4,0.8,4,0.8,164,94,160
+dementia,63,63,20,7,5,0.7143,5,0.7143,145,117,140
+gangrene,63,63,22,5,3,0.6,3,0.6,90,62,87
+pulmonary edema,53,53,30,7,5,0.7143,5,0.7143,130,105,125
+substance use disorder,53,53,21,8,6,0.75,6,0.75,107,82,101
+psychosis,52,52,25,5,2,0.4,2,0.4,109,89,107
+inguinal hernia,47,47,19,4,4,1.0,4,1.0,76,59,72
+complete atrioventricular block,44,44,16,4,4,1.0,4,1.0,99,61,95
+major depressive disorder,44,44,17,7,6,0.8571,6,0.8571,120,82,114
+pressure ulcer,43,43,14,4,3,0.75,3,0.75,97,56,94
+portal vein thrombosis,39,39,21,2,2,1.0,2,1.0,110,98,108
+abdominal aortic aneurysm,37,37,18,3,3,1.0,3,1.0,104,59,101
+tenosynovitis,36,36,13,3,0,0.0,0,0.0,33,8,33
+biliary obstruction,33,33,16,4,3,0.75,3,0.75,100,69,97
+spontaneous bacterial peritonitis,33,33,21,4,4,1.0,4,1.0,114,95,110
+peripheral arterial disease,31,31,12,8,7,0.875,7,0.875,85,58,78
+anxiety disorder,28,28,11,8,4,0.5,4,0.5,93,48,89
+bipolar disorder,28,28,9,9,5,0.5556,5,0.5556,95,44,90
+bone metastasis,28,28,8,7,5,0.7143,5,0.7143,86,40,81
+bursitis,28,28,14,7,2,0.2857,2,0.2857,75,42,73
+intestinal fistula,28,28,18,3,2,0.6667,2,0.6667,90,68,88
+necrotizing fasciitis,24,24,13,7,4,0.5714,4,0.5714,69,52,65
+ovarian cyst,24,24,12,2,1,0.5,1,0.5,59,55,58
+supraventricular tachycardia,24,24,8,4,2,0.5,2,0.5,82,33,80
+sialadenitis,22,22,7,3,1,0.3333,1,0.3333,80,32,79
+multiple myeloma,21,21,5,6,4,0.6667,4,0.6667,119,37,115
+peritonitis,21,21,10,4,2,0.5,2,0.5,61,47,59
+cardiac arrest,20,20,13,4,2,0.5,2,0.5,74,61,72
+vasculitis,19,19,0,15,13,0.8667,13,0.8667,80,0,67
+liver abscess,18,18,9,4,3,0.75,3,0.75,69,53,66
+sarcoidosis,18,18,5,6,5,0.8333,5,0.8333,84,52,79
+dental abscess,17,17,6,7,5,0.7143,5,0.7143,64,36,59
+liver metastasis,17,17,7,4,2,0.5,2,0.5,77,41,75
+paralytic ileus,17,17,9,3,1,0.3333,1,0.3333,50,24,49
+peritonsillar abscess,17,17,7,6,6,1.0,6,1.0,72,52,66
+infective endocarditis,15,15,10,6,4,0.6667,4,0.6667,78,70,74
+lymphedema,15,15,7,4,2,0.5,2,0.5,97,87,95
+otitis externa,15,15,11,2,2,1.0,2,1.0,67,58,65
+cauda equina syndrome,14,14,7,5,3,0.6,3,0.6,20,14,17
+lung metastasis,14,14,8,4,4,1.0,4,1.0,98,85,94
+anal fistula,13,13,7,3,1,0.3333,1,0.3333,84,76,83
+malnutrition,13,13,5,4,3,0.75,3,0.75,68,48,65
+mesenteric ischemia,13,13,0,6,4,0.6667,4,0.6667,50,0,46
+schizophrenia,13,13,0,10,3,0.3,3,0.3,48,0,45
+cerebral aneurysm,12,12,5,4,2,0.5,2,0.5,31,22,29
+diaphragmatic hernia,12,12,0,3,3,1.0,3,1.0,30,0,27
+peripheral artery aneurysm,12,12,0,7,3,0.4286,3,0.4286,47,0,44
+pyoderma gangrenosum,12,12,0,3,2,0.6667,2,0.6667,52,0,50
+alcoholic hepatitis,11,11,5,10,8,0.8,8,0.8,69,55,61
+cardiogenic shock,11,11,7,5,2,0.4,2,0.4,52,41,50
+epididymitis,11,11,0,4,3,0.75,3,0.75,40,0,37
+epiglottitis,11,11,8,3,3,1.0,3,1.0,63,46,60
+pulmonary hypertension,10,10,0,5,3,0.6,4,0.8,65,0,62
+splenic infarction,10,10,5,3,3,1.0,3,1.0,60,34,57
+acute liver failure,9,9,0,5,4,0.8,4,0.8,60,0,56
+esophageal motility disorder,9,9,5,4,3,0.75,3,0.75,40,32,37
+esophageal stricture,9,9,0,4,2,0.5,3,0.75,50,0,48
+hidradenitis suppurativa,9,9,0,2,1,0.5,1,0.5,37,0,36
+hydrocephalus,9,9,0,4,4,1.0,4,1.0,45,0,41
+intellectual disability,9,9,0,3,2,0.6667,2,0.6667,57,0,55
+hepatitis b,8,8,0,6,5,0.8333,5,0.8333,59,0,54
+myelodysplastic syndrome,8,8,0,5,2,0.4,3,0.6,56,0,54
+thoracic aortic aneurysm,8,8,0,3,3,1.0,3,1.0,34,0,31
+bell's palsy,7,7,0,4,3,0.75,3,0.75,46,0,43
+encephalopathy,7,7,0,7,4,0.5714,5,0.7143,62,0,58
+lyme disease,7,7,0,5,4,0.8,4,0.8,61,0,57
+myocarditis,7,7,0,4,3,0.75,3,0.75,59,0,56
+otitis media,7,7,0,5,3,0.6,3,0.6,42,0,39
+pancreatic pseudocyst,7,7,0,5,2,0.4,2,0.4,41,0,39
+urticaria,7,7,0,5,5,1.0,5,1.0,59,0,54
+herpes simplex infection,6,6,0,8,2,0.25,2,0.25,41,0,39
+ovarian cancer,6,6,0,3,1,0.3333,2,0.6667,40,0,39
+testicular torsion,6,6,0,3,2,0.6667,2,0.6667,21,0,19
+babesiosis,5,5,0,4,4,1.0,4,1.0,20,0,16
+cardiac tamponade,5,5,0,3,2,0.6667,2,0.6667,41,0,39
+hepatorenal syndrome,5,5,0,3,1,0.3333,1,0.3333,46,0,45
+idiopathic intracranial hypertension,5,5,0,4,3,0.75,4,1.0,40,0,37
+pleural empyema,5,5,0,3,2,0.6667,2,0.6667,27,0,25
+brain metastasis,4,4,0,5,2,0.4,3,0.6,42,0,40
+carotid artery dissection,4,4,0,5,3,0.6,3,0.6,20,0,17
+conjunctivitis,4,4,0,4,2,0.5,3,0.75,23,0,21
+melanoma,4,4,0,2,0,0.0,0,0.0,34,0,34
+nonalcoholic steatohepatitis,4,4,0,4,1,0.25,1,0.25,41,0,40
+oral candidiasis,4,4,0,5,3,0.6,3,0.6,33,0,30
+amyotrophic lateral sclerosis,3,3,0,5,3,0.6,3,0.6,30,0,27
+cystic fibrosis,3,3,0,3,2,0.6667,2,0.6667,24,0,22
+herpes zoster,3,3,0,4,2,0.5,2,0.5,44,0,42
+pilonidal disease,3,3,0,3,0,0.0,0,0.0,13,0,13
+polycythemia vera,3,3,0,5,1,0.2,1,0.2,23,0,22
+psoriatic arthritis,3,3,0,4,0,0.0,0,0.0,28,0,28
+spinal stenosis,3,3,0,2,2,1.0,2,1.0,19,0,17
+varicose veins,3,3,0,4,2,0.5,2,0.5,40,0,38
+acute respiratory distress syndrome,2,2,0,4,1,0.25,1,0.25,23,0,22
+amyloidosis,2,2,0,6,0,0.0,0,0.0,24,0,24
+avascular necrosis,2,2,0,3,1,0.3333,1,0.3333,30,0,29
+borderline personality disorder,2,2,0,7,0,0.0,0,0.0,26,0,26
+central retinal artery occlusion,2,2,0,2,0,0.0,0,0.0,4,0,4
+chronic venous insufficiency,2,2,0,3,2,0.6667,2,0.6667,23,0,21
+compartment syndrome,2,2,0,3,1,0.3333,1,0.3333,10,0,9
+graft-versus-host disease,2,2,0,3,1,0.3333,2,0.6667,15,0,14
+mediastinitis,2,2,0,2,0,0.0,1,0.5,14,0,14
+osteonecrosis,2,2,0,2,0,0.0,0,0.0,9,0,9
+polycystic kidney disease,2,2,0,3,2,0.6667,2,0.6667,22,0,20
+polyneuropathy,2,2,0,3,0,0.0,0,0.0,12,0,12
+post-traumatic stress disorder,2,2,0,4,2,0.5,2,0.5,19,0,17
+rectal prolapse,2,2,0,3,0,0.0,0,0.0,5,0,5
+thyroid cancer,2,2,0,4,1,0.25,1,0.25,19,0,18
+ventricular fibrillation,2,2,0,3,1,0.3333,1,0.3333,9,0,8
+von willebrand disease,2,2,0,5,0,0.0,0,0.0,5,0,5
+angioedema,1,1,0,2,0,0.0,0,0.0,3,0,3
+antiphospholipid syndrome,1,1,0,2,0,0.0,0,0.0,4,0,4
+aspergillosis,1,1,0,2,0,0.0,0,0.0,7,0,7
+autoimmune hepatitis,1,1,0,4,1,0.25,1,0.25,11,0,10
+cytomegalovirus infection,1,1,0,4,1,0.25,2,0.5,13,0,12
+dermatophytosis (tinea),1,1,0,2,0,0.0,1,0.5,10,0,10
+drug eruption,1,1,0,6,2,0.3333,2,0.3333,13,0,11
+encephalitis,1,1,0,4,1,0.25,1,0.25,4,0,3
+hemochromatosis,1,1,0,5,1,0.2,1,0.2,15,0,14
+hyperaldosteronism,1,1,0,2,0,0.0,0,0.0,6,0,6
+impetigo,1,1,0,3,2,0.6667,2,0.6667,9,0,7
+long qt syndrome,1,1,0,3,0,0.0,1,0.3333,13,0,13
+muscular dystrophy,1,1,0,3,0,0.0,0,0.0,10,0,10
+neurosyphilis,1,1,0,3,0,0.0,0,0.0,4,0,4
+obsessive-compulsive disorder,1,1,0,2,0,0.0,0,0.0,9,0,9
+orchitis,1,1,0,2,0,0.0,1,0.5,21,0,21
+ovarian hyperstimulation syndrome,1,1,0,2,1,0.5,1,0.5,13,0,12
+paget's disease of bone,1,1,0,2,0,0.0,0,0.0,3,0,3
+pemphigus vulgaris,1,1,0,4,0,0.0,0,0.0,7,0,7
+peritoneal metastasis,1,1,0,3,2,0.6667,2,0.6667,13,0,11
+polymyalgia rheumatica,1,1,0,5,1,0.2,1,0.2,4,0,3
+popliteal cyst,1,1,0,3,0,0.0,0,0.0,9,0,9
+rosacea,1,1,0,2,0,0.0,0,0.0,6,0,6
+scabies,1,1,0,2,1,0.5,1,0.5,9,0,8
+scoliosis,1,1,0,2,1,0.5,1,0.5,2,0,1
+siadh (syndrome of inappropriate antidiuretic hormone),1,1,0,3,1,0.3333,2,0.6667,3,0,2
+spina bifida,1,1,0,3,0,0.0,1,0.3333,8,0,8
+streptococcal pharyngitis,1,1,0,3,2,0.6667,2,0.6667,8,0,6
+thrombophilia,1,1,0,1,0,0.0,0,0.0,3,0,3
+tularemia,1,1,0,3,1,0.3333,1,0.3333,10,0,9
+anaphylaxis,0,0,0,4,0,0.0,0,0.0,0,0,0
+aspiration pneumonia,0,0,0,3,0,0.0,0,0.0,0,0,0
+atrial septal defect,0,0,0,4,0,0.0,0,0.0,0,0,0
+attention deficit hyperactivity disorder (adhd),0,0,0,2,0,0.0,0,0.0,0,0,0
+brain abscess,0,0,0,5,0,0.0,0,0.0,0,0,0
+budd-chiari syndrome,0,0,0,2,0,0.0,0,0.0,0,0,0
+carcinoid syndrome,0,0,0,2,0,0.0,0,0.0,0,0,0
+colorectal polyp,0,0,0,3,0,0.0,0,0.0,0,0,0
+common variable immunodeficiency,0,0,0,1,0,0.0,0,0.0,0,0,0
+disseminated candidiasis,0,0,0,2,0,0.0,0,0.0,0,0,0
+esophageal atresia,0,0,0,2,0,0.0,0,0.0,0,0,0
+esophageal cancer,0,0,0,4,0,0.0,0,0.0,0,0,0
+esophageal perforation,0,0,0,3,0,0.0,0,0.0,0,0,0
+fibromyalgia,0,0,0,4,0,0.0,0,0.0,0,0,0
+glaucoma,0,0,0,3,0,0.0,0,0.0,0,0,0
+hemophagocytic syndrome,0,0,0,3,0,0.0,0,0.0,0,0,0
+hyperparathyroidism,0,0,0,3,0,0.0,0,0.0,0,0,0
+marfan syndrome,0,0,0,4,0,0.0,0,0.0,0,0,0
+neurofibromatosis,0,0,0,3,0,0.0,0,0.0,0,0,0
+osteoporosis,0,0,0,5,0,0.0,0,0.0,0,0,0
+peyronie's disease,0,0,0,2,0,0.0,0,0.0,0,0,0
+phimosis,0,0,0,1,0,0.0,0,0.0,0,0,0
+portal hypertension,0,0,0,2,0,0.0,0,0.0,0,0,0
+raynaud's syndrome,0,0,0,3,0,0.0,0,0.0,0,0,0
+renal infarction,0,0,0,4,0,0.0,0,0.0,0,0,0
+schistosomiasis,0,0,0,3,0,0.0,0,0.0,0,0,0
+sclerosing mesenteritis,0,0,0,2,0,0.0,0,0.0,0,0,0
+spinal epidural abscess,0,0,0,4,0,0.0,0,0.0,0,0,0
+systemic mastocytosis,0,0,0,3,0,0.0,0,0.0,0,0,0
+testicular cancer,0,0,0,1,0,0.0,0,0.0,0,0,0
+ventricular septal defect,0,0,0,2,0,0.0,0,0.0,0,0,0

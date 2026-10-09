@@ -1,0 +1,51 @@
+# ---- environment / secrets ----
+.env
+.venv/
+__pycache__/
+*.pyc
+.pytest_cache/
+wandb/
+
+# ---- model weights (symlinks to local checkpoints; see models/README.md) ----
+models/*
+
+# ---- MIMIC-IV-derived data: cannot be redistributed (PhysioNet credentialed DUA) ----
+data/profiles/
+data/dialogues/
+data/hg_softlabel/
+data/retriever/
+data/oog/
+data/human_eval/simulator_eval/to_eval_by_turn.json
+data/human_eval/hallucination_eval/eval_set.json
+data/human_eval/hallucination_eval/eval_set_map.json
+data/human_eval/hallucination_eval/strings_en.json
+data/human_eval/hallucination_eval/translations_ko.json
+data/human_eval/hallucination_eval/hallucination_annotations_per_turn.csv
+data/human_eval/hallucination_eval/hallucination_flagged_turns.csv
+data/human_eval/dialogue_review/selected_dialogues.json
+data/human_eval/dialogue_review/_ko_translations.json
+data/human_eval/dialogue_review/_unique_lines.json
+results/main/*/dialog.json
+results/main/*/dialog_anal.json
+results/oog/pipeline/*_results.json
+
+# ---- run outputs ----
+runs/
+figures/
+
+# ---- cluster launchers and internal working notes (local only) ----
+slurm/
+scripts/oog/slurm/
+scripts/oog/docs/
+results/oog/ood_adopted_seed9_INSPECTION.csv
+
+# ---- per-row predictions that embed MIMIC-derived dialogue text ----
+results/hg_standalone/test_predictions.json
+
+# ---- paper source (kept locally next to the code, not part of the code release) ----
+/paper/
+
+# ---- raw sweep outputs: only the aggregated tables in results/*/final_tables and metrics.json are versioned ----
+results/oog/pipeline/
+results/oog/hg_sweep/
+figure/*.pdf

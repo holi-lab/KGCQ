@@ -1,0 +1,12 @@
+metric,value
+dialogues,45
+patient_turns_evaluated,265
+annotators,3
+flags_raw_annotator1,6
+flags_raw_annotator2,1
+flags_raw_annotator3,4
+distinct_flagged_turns,8
+confirmed_contradictions,1
+contradiction_rate,0.38%
+supported_misflags,4
+fabrication_absent_not_counted,3

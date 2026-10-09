@@ -1,0 +1,458 @@
+Evaluation Results - 20251223_153226
+======================================================================
+
+Model: trained_embeddinggemma-300m-medical_lr1e-05_ep15
+Path: ./train/trained_models/trained_embeddinggemma-300m-medical_lr1e-05_ep15
+----------------------------------------------------------------------
+Total samples: 170
+Recall@1: 5.88%
+Recall@2: 10.59%
+Recall@3: 12.35%
+Recall@4: 14.12%
+
+Model: trained_embeddinggemma-300m-medical_lr2e-05_ep15
+Path: ./train/trained_models/trained_embeddinggemma-300m-medical_lr2e-05_ep15
+----------------------------------------------------------------------
+Total samples: 170
+Recall@1: 4.71%
+Recall@2: 8.24%
+Recall@3: 11.18%
+Recall@4: 13.53%
+
+Model: trained_sapbert-from-pubmedbert-fulltext_lr2e-05_ep5
+Path: ./train/trained_models/trained_sapbert-from-pubmedbert-fulltext_lr2e-05_ep5
+----------------------------------------------------------------------
+Total samples: 170
+Recall@1: 4.71%
+Recall@2: 8.24%
+Recall@3: 12.94%
+Recall@4: 17.65%
+
+Model: trained_qwen3-embedding-4b_lr1e-05_ep10
+Path: ./train/trained_models/trained_qwen3-embedding-4b_lr1e-05_ep10
+----------------------------------------------------------------------
+Total samples: 170
+Recall@1: 5.88%
+Recall@2: 11.76%
+Recall@3: 16.47%
+Recall@4: 20.00%
+
+Model: trained_embeddinggemma-300m-medical_lr5e-06_ep5
+Path: ./train/trained_models/trained_embeddinggemma-300m-medical_lr5e-06_ep5
+----------------------------------------------------------------------
+Total samples: 170
+Recall@1: 4.12%
+Recall@2: 7.06%
+Recall@3: 8.82%
+Recall@4: 11.18%
+
+Model: trained_qwen3-embedding-0_6b_lr5e-06_ep10
+Path: ./train/trained_models/trained_qwen3-embedding-0_6b_lr5e-06_ep10
+----------------------------------------------------------------------
+Total samples: 170
+Recall@1: 5.29%
+Recall@2: 8.24%
+Recall@3: 11.76%
+Recall@4: 14.71%
+
+Model: trained_all-mpnet-base-v2_lr3e-05_ep15
+Path: ./train/trained_models/trained_all-mpnet-base-v2_lr3e-05_ep15
+----------------------------------------------------------------------
+Total samples: 170
+Recall@1: 5.29%
+Recall@2: 10.59%
+Recall@3: 15.88%
+Recall@4: 18.24%
+
+Model: trained_all-mpnet-base-v2_lr2e-05_ep5
+Path: ./train/trained_models/trained_all-mpnet-base-v2_lr2e-05_ep5
+----------------------------------------------------------------------
+Total samples: 170
+Recall@1: 2.35%
+Recall@2: 3.53%
+Recall@3: 7.06%
+Recall@4: 8.24%
+
+Model: trained_sapbert-from-pubmedbert-fulltext_lr5e-06_ep10
+Path: ./train/trained_models/trained_sapbert-from-pubmedbert-fulltext_lr5e-06_ep10
+----------------------------------------------------------------------
+Total samples: 170
+Recall@1: 3.53%
+Recall@2: 7.06%
+Recall@3: 10.59%
+Recall@4: 12.35%
+
+Model: trained_all-mpnet-base-v2_lr2e-05_ep10
+Path: ./train/trained_models/trained_all-mpnet-base-v2_lr2e-05_ep10
+----------------------------------------------------------------------
+Total samples: 170
+Recall@1: 2.35%
+Recall@2: 8.24%
+Recall@3: 12.35%
+Recall@4: 14.71%
+
+Model: trained_sapbert-from-pubmedbert-fulltext_lr5e-06_ep15
+Path: ./train/trained_models/trained_sapbert-from-pubmedbert-fulltext_lr5e-06_ep15
+----------------------------------------------------------------------
+Total samples: 170
+Recall@1: 4.12%
+Recall@2: 9.41%
+Recall@3: 12.94%
+Recall@4: 18.82%
+
+Model: trained_embeddinggemma-300m-medical_lr2e-05_ep5
+Path: ./train/trained_models/trained_embeddinggemma-300m-medical_lr2e-05_ep5
+----------------------------------------------------------------------
+Total samples: 170
+Recall@1: 5.88%
+Recall@2: 7.06%
+Recall@3: 10.00%
+Recall@4: 14.12%
+
+Model: trained_all-mpnet-base-v2_lr3e-05_ep5
+Path: ./train/trained_models/trained_all-mpnet-base-v2_lr3e-05_ep5
+----------------------------------------------------------------------
+Total samples: 170
+Recall@1: 2.94%
+Recall@2: 7.65%
+Recall@3: 9.41%
+Recall@4: 12.35%
+
+Model: trained_sapbert-from-pubmedbert-fulltext_lr1e-05_ep10
+Path: ./train/trained_models/trained_sapbert-from-pubmedbert-fulltext_lr1e-05_ep10
+----------------------------------------------------------------------
+Total samples: 170
+Recall@1: 4.71%
+Recall@2: 11.76%
+Recall@3: 17.06%
+Recall@4: 20.59%
+
+Model: trained_embeddinggemma-300m-medical_lr1e-05_ep5
+Path: ./train/trained_models/trained_embeddinggemma-300m-medical_lr1e-05_ep5
+----------------------------------------------------------------------
+Total samples: 170
+Recall@1: 4.71%
+Recall@2: 10.00%
+Recall@3: 11.18%
+Recall@4: 14.12%
+
+Model: trained_all-mpnet-base-v2_lr1e-05_ep15
+Path: ./train/trained_models/trained_all-mpnet-base-v2_lr1e-05_ep15
+----------------------------------------------------------------------
+Total samples: 170
+Recall@1: 1.76%
+Recall@2: 4.12%
+Recall@3: 7.06%
+Recall@4: 10.59%
+
+Model: trained_qwen3-embedding-0_6b_lr3e-05_ep15
+Path: ./train/trained_models/trained_qwen3-embedding-0_6b_lr3e-05_ep15
+----------------------------------------------------------------------
+Total samples: 170
+Recall@1: 2.94%
+Recall@2: 5.88%
+Recall@3: 9.41%
+Recall@4: 11.76%
+
+Model: trained_all-mpnet-base-v2_lr5e-06_ep15
+Path: ./train/trained_models/trained_all-mpnet-base-v2_lr5e-06_ep15
+----------------------------------------------------------------------
+Total samples: 170
+Recall@1: 1.76%
+Recall@2: 2.35%
+Recall@3: 4.12%
+Recall@4: 5.29%
+
+Model: trained_embeddinggemma-300m-medical_lr2e-05_ep10
+Path: ./train/trained_models/trained_embeddinggemma-300m-medical_lr2e-05_ep10
+----------------------------------------------------------------------
+Total samples: 170
+Recall@1: 7.06%
+Recall@2: 14.12%
+Recall@3: 16.47%
+Recall@4: 19.41%
+
+Model: trained_sapbert-from-pubmedbert-fulltext_lr3e-05_ep15
+Path: ./train/trained_models/trained_sapbert-from-pubmedbert-fulltext_lr3e-05_ep15
+----------------------------------------------------------------------
+Total samples: 170
+Recall@1: 5.29%
+Recall@2: 14.12%
+Recall@3: 19.41%
+Recall@4: 21.76%
+
+Model: trained_qwen3-embedding-0_6b_lr1e-05_ep10
+Path: ./train/trained_models/trained_qwen3-embedding-0_6b_lr1e-05_ep10
+----------------------------------------------------------------------
+Total samples: 170
+Recall@1: 5.29%
+Recall@2: 7.65%
+Recall@3: 12.35%
+Recall@4: 16.47%
+
+Model: trained_embeddinggemma-300m-medical_lr1e-05_ep10
+Path: ./train/trained_models/trained_embeddinggemma-300m-medical_lr1e-05_ep10
+----------------------------------------------------------------------
+Total samples: 170
+Recall@1: 2.94%
+Recall@2: 4.71%
+Recall@3: 7.65%
+Recall@4: 12.94%
+
+Model: trained_qwen3-embedding-0_6b_lr2e-05_ep10
+Path: ./train/trained_models/trained_qwen3-embedding-0_6b_lr2e-05_ep10
+----------------------------------------------------------------------
+Total samples: 170
+Recall@1: 5.29%
+Recall@2: 7.65%
+Recall@3: 10.59%
+Recall@4: 11.76%
+
+Model: trained_embeddinggemma-300m-medical_lr3e-05_ep10
+Path: ./train/trained_models/trained_embeddinggemma-300m-medical_lr3e-05_ep10
+----------------------------------------------------------------------
+Total samples: 170
+Recall@1: 3.53%
+Recall@2: 9.41%
+Recall@3: 14.12%
+Recall@4: 17.06%
+
+Model: trained_all-mpnet-base-v2_lr2e-05_ep15
+Path: ./train/trained_models/trained_all-mpnet-base-v2_lr2e-05_ep15
+----------------------------------------------------------------------
+Total samples: 170
+Recall@1: 4.12%
+Recall@2: 7.06%
+Recall@3: 9.41%
+Recall@4: 14.12%
+
+Model: trained_qwen3-embedding-0_6b_lr1e-05_ep15
+Path: ./train/trained_models/trained_qwen3-embedding-0_6b_lr1e-05_ep15
+----------------------------------------------------------------------
+Total samples: 170
+Recall@1: 7.06%
+Recall@2: 11.18%
+Recall@3: 13.53%
+Recall@4: 15.88%
+
+Model: trained_qwen3-embedding-0_6b_lr2e-05_ep15
+Path: ./train/trained_models/trained_qwen3-embedding-0_6b_lr2e-05_ep15
+----------------------------------------------------------------------
+Total samples: 170
+Recall@1: 4.71%
+Recall@2: 8.82%
+Recall@3: 11.76%
+Recall@4: 14.71%
+
+Model: trained_all-mpnet-base-v2_lr1e-05_ep5
+Path: ./train/trained_models/trained_all-mpnet-base-v2_lr1e-05_ep5
+----------------------------------------------------------------------
+Total samples: 170
+Recall@1: 3.53%
+Recall@2: 5.29%
+Recall@3: 5.88%
+Recall@4: 6.47%
+
+Model: trained_sapbert-from-pubmedbert-fulltext_lr1e-05_ep5
+Path: ./train/trained_models/trained_sapbert-from-pubmedbert-fulltext_lr1e-05_ep5
+----------------------------------------------------------------------
+Total samples: 170
+Recall@1: 3.53%
+Recall@2: 8.82%
+Recall@3: 11.18%
+Recall@4: 12.35%
+
+Model: trained_embeddinggemma-300m-medical_lr5e-06_ep10
+Path: ./train/trained_models/trained_embeddinggemma-300m-medical_lr5e-06_ep10
+----------------------------------------------------------------------
+Total samples: 170
+Recall@1: 2.94%
+Recall@2: 5.29%
+Recall@3: 7.06%
+Recall@4: 7.65%
+
+Model: trained_sapbert-from-pubmedbert-fulltext_lr2e-05_ep10
+Path: ./train/trained_models/trained_sapbert-from-pubmedbert-fulltext_lr2e-05_ep10
+----------------------------------------------------------------------
+Total samples: 170
+Recall@1: 7.06%
+Recall@2: 15.29%
+Recall@3: 22.35%
+Recall@4: 25.29%
+
+Model: trained_all-mpnet-base-v2_lr5e-06_ep10
+Path: ./train/trained_models/trained_all-mpnet-base-v2_lr5e-06_ep10
+----------------------------------------------------------------------
+Total samples: 170
+Recall@1: 1.76%
+Recall@2: 3.53%
+Recall@3: 4.71%
+Recall@4: 5.88%
+
+Model: trained_qwen3-embedding-0_6b_lr5e-06_ep15
+Path: ./train/trained_models/trained_qwen3-embedding-0_6b_lr5e-06_ep15
+----------------------------------------------------------------------
+Total samples: 170
+Recall@1: 2.35%
+Recall@2: 5.29%
+Recall@3: 8.82%
+Recall@4: 12.35%
+
+Model: trained_sapbert-from-pubmedbert-fulltext_lr3e-05_ep5
+Path: ./train/trained_models/trained_sapbert-from-pubmedbert-fulltext_lr3e-05_ep5
+----------------------------------------------------------------------
+Total samples: 170
+Recall@1: 5.88%
+Recall@2: 13.53%
+Recall@3: 17.65%
+Recall@4: 21.18%
+
+Model: trained_sapbert-from-pubmedbert-fulltext_lr3e-05_ep10
+Path: ./train/trained_models/trained_sapbert-from-pubmedbert-fulltext_lr3e-05_ep10
+----------------------------------------------------------------------
+Total samples: 170
+Recall@1: 11.76%
+Recall@2: 16.47%
+Recall@3: 22.35%
+Recall@4: 30.59%
+
+Model: trained_embeddinggemma-300m-medical_lr3e-05_ep15
+Path: ./train/trained_models/trained_embeddinggemma-300m-medical_lr3e-05_ep15
+----------------------------------------------------------------------
+Total samples: 170
+Recall@1: 7.65%
+Recall@2: 12.94%
+Recall@3: 15.29%
+Recall@4: 17.65%
+
+Model: trained_sapbert-from-pubmedbert-fulltext_lr2e-05_ep15
+Path: ./train/trained_models/trained_sapbert-from-pubmedbert-fulltext_lr2e-05_ep15
+----------------------------------------------------------------------
+Total samples: 170
+Recall@1: 8.82%
+Recall@2: 14.12%
+Recall@3: 18.24%
+Recall@4: 21.18%
+
+Model: trained_all-mpnet-base-v2_lr5e-06_ep5
+Path: ./train/trained_models/trained_all-mpnet-base-v2_lr5e-06_ep5
+----------------------------------------------------------------------
+Total samples: 170
+Recall@1: 0.59%
+Recall@2: 1.18%
+Recall@3: 2.94%
+Recall@4: 4.12%
+
+Model: trained_embeddinggemma-300m-medical_lr5e-06_ep15
+Path: ./train/trained_models/trained_embeddinggemma-300m-medical_lr5e-06_ep15
+----------------------------------------------------------------------
+Total samples: 170
+Recall@1: 2.94%
+Recall@2: 6.47%
+Recall@3: 10.00%
+Recall@4: 12.35%
+
+Model: trained_sapbert-from-pubmedbert-fulltext_lr1e-05_ep15
+Path: ./train/trained_models/trained_sapbert-from-pubmedbert-fulltext_lr1e-05_ep15
+----------------------------------------------------------------------
+Total samples: 170
+Recall@1: 7.65%
+Recall@2: 16.47%
+Recall@3: 21.18%
+Recall@4: 24.12%
+
+Model: trained_qwen3-embedding-0_6b_lr3e-05_ep10
+Path: ./train/trained_models/trained_qwen3-embedding-0_6b_lr3e-05_ep10
+----------------------------------------------------------------------
+Total samples: 170
+Recall@1: 3.53%
+Recall@2: 7.65%
+Recall@3: 9.41%
+Recall@4: 10.59%
+
+Model: trained_sapbert-from-pubmedbert-fulltext_lr5e-06_ep5
+Path: ./train/trained_models/trained_sapbert-from-pubmedbert-fulltext_lr5e-06_ep5
+----------------------------------------------------------------------
+Total samples: 170
+Recall@1: 2.94%
+Recall@2: 4.12%
+Recall@3: 5.88%
+Recall@4: 7.65%
+
+Model: trained_all-mpnet-base-v2_lr1e-05_ep10
+Path: ./train/trained_models/trained_all-mpnet-base-v2_lr1e-05_ep10
+----------------------------------------------------------------------
+Total samples: 170
+Recall@1: 3.53%
+Recall@2: 4.12%
+Recall@3: 4.71%
+Recall@4: 9.41%
+
+Model: trained_embeddinggemma-300m-medical_lr3e-05_ep5
+Path: ./train/trained_models/trained_embeddinggemma-300m-medical_lr3e-05_ep5
+----------------------------------------------------------------------
+Total samples: 170
+Recall@1: 4.12%
+Recall@2: 8.24%
+Recall@3: 11.18%
+Recall@4: 14.71%
+
+Model: trained_all-mpnet-base-v2_lr3e-05_ep10
+Path: ./train/trained_models/trained_all-mpnet-base-v2_lr3e-05_ep10
+----------------------------------------------------------------------
+Total samples: 170
+Recall@1: 7.65%
+Recall@2: 10.00%
+Recall@3: 14.71%
+Recall@4: 19.41%
+
+
+======================================================================
+Summary
+======================================================================
+
+trained_embeddinggemma-300m-medical_lr1e-05_ep15 | R@1:  5.88% | R@2: 10.59% | R@3: 12.35% | R@4: 14.12% | 
+trained_embeddinggemma-300m-medical_lr2e-05_ep15 | R@1:  4.71% | R@2:  8.24% | R@3: 11.18% | R@4: 13.53% | 
+trained_sapbert-from-pubmedbert-fulltext_lr2e-05_ep5 | R@1:  4.71% | R@2:  8.24% | R@3: 12.94% | R@4: 17.65% | 
+trained_qwen3-embedding-4b_lr1e-05_ep10 | R@1:  5.88% | R@2: 11.76% | R@3: 16.47% | R@4: 20.00% | 
+trained_embeddinggemma-300m-medical_lr5e-06_ep5 | R@1:  4.12% | R@2:  7.06% | R@3:  8.82% | R@4: 11.18% | 
+trained_qwen3-embedding-0_6b_lr5e-06_ep10 | R@1:  5.29% | R@2:  8.24% | R@3: 11.76% | R@4: 14.71% | 
+trained_all-mpnet-base-v2_lr3e-05_ep15 | R@1:  5.29% | R@2: 10.59% | R@3: 15.88% | R@4: 18.24% | 
+trained_all-mpnet-base-v2_lr2e-05_ep5 | R@1:  2.35% | R@2:  3.53% | R@3:  7.06% | R@4:  8.24% | 
+trained_sapbert-from-pubmedbert-fulltext_lr5e-06_ep10 | R@1:  3.53% | R@2:  7.06% | R@3: 10.59% | R@4: 12.35% | 
+trained_all-mpnet-base-v2_lr2e-05_ep10 | R@1:  2.35% | R@2:  8.24% | R@3: 12.35% | R@4: 14.71% | 
+trained_sapbert-from-pubmedbert-fulltext_lr5e-06_ep15 | R@1:  4.12% | R@2:  9.41% | R@3: 12.94% | R@4: 18.82% | 
+trained_embeddinggemma-300m-medical_lr2e-05_ep5 | R@1:  5.88% | R@2:  7.06% | R@3: 10.00% | R@4: 14.12% | 
+trained_all-mpnet-base-v2_lr3e-05_ep5 | R@1:  2.94% | R@2:  7.65% | R@3:  9.41% | R@4: 12.35% | 
+trained_sapbert-from-pubmedbert-fulltext_lr1e-05_ep10 | R@1:  4.71% | R@2: 11.76% | R@3: 17.06% | R@4: 20.59% | 
+trained_embeddinggemma-300m-medical_lr1e-05_ep5 | R@1:  4.71% | R@2: 10.00% | R@3: 11.18% | R@4: 14.12% | 
+trained_all-mpnet-base-v2_lr1e-05_ep15 | R@1:  1.76% | R@2:  4.12% | R@3:  7.06% | R@4: 10.59% | 
+trained_qwen3-embedding-0_6b_lr3e-05_ep15 | R@1:  2.94% | R@2:  5.88% | R@3:  9.41% | R@4: 11.76% | 
+trained_all-mpnet-base-v2_lr5e-06_ep15 | R@1:  1.76% | R@2:  2.35% | R@3:  4.12% | R@4:  5.29% | 
+trained_embeddinggemma-300m-medical_lr2e-05_ep10 | R@1:  7.06% | R@2: 14.12% | R@3: 16.47% | R@4: 19.41% | 
+trained_sapbert-from-pubmedbert-fulltext_lr3e-05_ep15 | R@1:  5.29% | R@2: 14.12% | R@3: 19.41% | R@4: 21.76% | 
+trained_qwen3-embedding-0_6b_lr1e-05_ep10 | R@1:  5.29% | R@2:  7.65% | R@3: 12.35% | R@4: 16.47% | 
+trained_embeddinggemma-300m-medical_lr1e-05_ep10 | R@1:  2.94% | R@2:  4.71% | R@3:  7.65% | R@4: 12.94% | 
+trained_qwen3-embedding-0_6b_lr2e-05_ep10 | R@1:  5.29% | R@2:  7.65% | R@3: 10.59% | R@4: 11.76% | 
+trained_embeddinggemma-300m-medical_lr3e-05_ep10 | R@1:  3.53% | R@2:  9.41% | R@3: 14.12% | R@4: 17.06% | 
+trained_all-mpnet-base-v2_lr2e-05_ep15 | R@1:  4.12% | R@2:  7.06% | R@3:  9.41% | R@4: 14.12% | 
+trained_qwen3-embedding-0_6b_lr1e-05_ep15 | R@1:  7.06% | R@2: 11.18% | R@3: 13.53% | R@4: 15.88% | 
+trained_qwen3-embedding-0_6b_lr2e-05_ep15 | R@1:  4.71% | R@2:  8.82% | R@3: 11.76% | R@4: 14.71% | 
+trained_all-mpnet-base-v2_lr1e-05_ep5 | R@1:  3.53% | R@2:  5.29% | R@3:  5.88% | R@4:  6.47% | 
+trained_sapbert-from-pubmedbert-fulltext_lr1e-05_ep5 | R@1:  3.53% | R@2:  8.82% | R@3: 11.18% | R@4: 12.35% | 
+trained_embeddinggemma-300m-medical_lr5e-06_ep10 | R@1:  2.94% | R@2:  5.29% | R@3:  7.06% | R@4:  7.65% | 
+trained_sapbert-from-pubmedbert-fulltext_lr2e-05_ep10 | R@1:  7.06% | R@2: 15.29% | R@3: 22.35% | R@4: 25.29% | 
+trained_all-mpnet-base-v2_lr5e-06_ep10 | R@1:  1.76% | R@2:  3.53% | R@3:  4.71% | R@4:  5.88% | 
+trained_qwen3-embedding-0_6b_lr5e-06_ep15 | R@1:  2.35% | R@2:  5.29% | R@3:  8.82% | R@4: 12.35% | 
+trained_sapbert-from-pubmedbert-fulltext_lr3e-05_ep5 | R@1:  5.88% | R@2: 13.53% | R@3: 17.65% | R@4: 21.18% | 
+trained_sapbert-from-pubmedbert-fulltext_lr3e-05_ep10 | R@1: 11.76% | R@2: 16.47% | R@3: 22.35% | R@4: 30.59% | 
+trained_embeddinggemma-300m-medical_lr3e-05_ep15 | R@1:  7.65% | R@2: 12.94% | R@3: 15.29% | R@4: 17.65% | 
+trained_sapbert-from-pubmedbert-fulltext_lr2e-05_ep15 | R@1:  8.82% | R@2: 14.12% | R@3: 18.24% | R@4: 21.18% | 
+trained_all-mpnet-base-v2_lr5e-06_ep5 | R@1:  0.59% | R@2:  1.18% | R@3:  2.94% | R@4:  4.12% | 
+trained_embeddinggemma-300m-medical_lr5e-06_ep15 | R@1:  2.94% | R@2:  6.47% | R@3: 10.00% | R@4: 12.35% | 
+trained_sapbert-from-pubmedbert-fulltext_lr1e-05_ep15 | R@1:  7.65% | R@2: 16.47% | R@3: 21.18% | R@4: 24.12% | 
+trained_qwen3-embedding-0_6b_lr3e-05_ep10 | R@1:  3.53% | R@2:  7.65% | R@3:  9.41% | R@4: 10.59% | 
+trained_sapbert-from-pubmedbert-fulltext_lr5e-06_ep5 | R@1:  2.94% | R@2:  4.12% | R@3:  5.88% | R@4:  7.65% | 
+trained_all-mpnet-base-v2_lr1e-05_ep10 | R@1:  3.53% | R@2:  4.12% | R@3:  4.71% | R@4:  9.41% | 
+trained_embeddinggemma-300m-medical_lr3e-05_ep5 | R@1:  4.12% | R@2:  8.24% | R@3: 11.18% | R@4: 14.71% | 
+trained_all-mpnet-base-v2_lr3e-05_ep10 | R@1:  7.65% | R@2: 10.00% | R@3: 14.71% | R@4: 19.41% | 

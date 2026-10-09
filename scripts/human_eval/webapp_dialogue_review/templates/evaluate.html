@@ -1,0 +1,130 @@
+<!doctype html>
+<html lang="ko"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>대화 #{{ "%02d"|format(view.item_no) }} / {{ total }}</title>
+<link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}"></head>
+<body>
+<div class="topbar">
+  <span class="who">👤 {{ evaluator }}</span>
+  <span class="prog">{{ done_count }} / {{ total }} 완료</span>
+  <div class="bar"><div style="width: {{ (done_count/total*100)|round(0) }}%"></div></div>
+  <a href="{{ url_for('overall') }}">종합질문</a>
+  <a href="{{ url_for('logout') }}">로그아웃</a>
+</div>
+<div class="grid">
+  {% for g in grid %}
+    <a class="{{ 'done' if g.done }} {{ 'cur' if g.i==idx }}" href="{{ url_for('item', idx=g.i) }}">{{ g.i+1 }}</a>
+  {% endfor %}
+  <a class="ov" href="{{ url_for('overall') }}">종합</a>
+</div>
+
+<div class="wrap wide">
+ <div class="split">
+  <div class="col-left">
+  <div class="card">
+    <h3 style="margin:0;">대화 #{{ "%02d"|format(view.item_no) }} <span style="font-size:14px;color:#6b7280;">(Dialogue {{ view.item_no }} of {{ total }})</span></h3>
+  </div>
+
+  <div class="card">
+    {% for t in view.turns %}
+      <div class="turn {{ t.speaker }}">
+        <div class="b">
+          <div class="who">{{ '의사' if t.speaker=='doctor' else '환자' }}</div>
+          <div class="en">{{ t.en }}</div>
+          {% if t.ko %}<div class="ko">{{ t.ko }}</div>{% endif %}
+        </div>
+      </div>
+    {% endfor %}
+  </div>
+
+  <div class="card">
+    <div class="section-h">최종 진단</div>
+    <div class="dx">
+      {% for d in view.ranked_dx %}
+        <div class="rankline"><b>{{ d.rank }}순위:</b> {{ d.ko or d.en }}{% if d.ko %} <span class="en-inline">({{ d.en }})</span>{% endif %}</div>
+      {% endfor %}
+    </div>
+    <p style="margin:12px 0 0;"><span class="chart"><b>실제 정답 진단:</b>
+      {% for c in view.chart_answer %}{{ c.ko or c.en }}{% if c.ko %} <span class="en-inline">({{ c.en }})</span>{% endif %}{% if not loop.last %}, {% endif %}{% endfor %}</span></p>
+  </div>
+  </div><!-- /col-left -->
+
+  <div class="col-right">
+  <div class="card">
+    <div class="section-h">평가 질문 (대화를 읽고 답해주세요)</div>
+    {% for field, kind, en, ko in questions %}
+      <div class="q">
+        <div class="lab"><span class="tag">{{ field }}</span>{{ ko }}</div>
+        {% if kind == 'scale' %}
+          <div class="scale" data-field="{{ field }}">
+            {% for n in range(1,6) %}
+              <label class="{{ 'sel' if saved.answers.get(field)|string == n|string }}" data-val="{{ n }}">
+                <input type="radio" name="{{ field }}" value="{{ n }}"
+                  {{ 'checked' if saved.answers.get(field)|string == n|string }}><span>{{ n }}</span></label>
+            {% endfor %}
+          </div>
+        {% else %}
+          <textarea data-field="{{ field }}" placeholder="2–3줄로 구체적으로 작성해 주세요.">{{ saved.answers.get(field,'') }}</textarea>
+        {% endif %}
+      </div>
+    {% endfor %}
+  </div>
+
+  <div id="nextHint" class="nexthint">※ 이 페이지의 모든 척도(1~5)와 서술 항목을 입력하면 버튼이 활성화됩니다.</div>
+  <div class="nav">
+    {% if idx > 0 %}<a class="btn sec" href="{{ url_for('item', idx=idx-1) }}">← 이전</a>{% else %}<span></span>{% endif %}
+    <button class="btn" id="nextBtn" disabled>{{ '완료하고 다음 →' if idx+1 < total else '완료하고 종합질문 →' }}</button>
+  </div>
+  </div><!-- /col-right -->
+ </div><!-- /split -->
+</div>
+
+<div class="toast" id="toast">저장됨 ✓</div>
+<script>
+const ITEM = {{ idx }};
+const toast = document.getElementById('toast');
+let tmr;
+function flash(){ toast.classList.add('show'); clearTimeout(tmr); tmr=setTimeout(()=>toast.classList.remove('show'),900); }
+function post(url, body, cb){
+  fetch(url, {method:'POST', headers:{'Content-Type':'application/json'}, body:JSON.stringify(body)})
+    .then(r=>r.json()).then(d=>{ if(d.ok){ flash(); cb&&cb(d); } });
+}
+// 완료 조건: 모든 척도 선택 + 모든 서술 1자 이상
+const nextBtn = document.getElementById('nextBtn');
+const nextHint = document.getElementById('nextHint');
+function checkComplete(){
+  const scalesOk = [...document.querySelectorAll('.scale')].every(sc => sc.querySelector('label.sel'));
+  const textsOk = [...document.querySelectorAll('textarea[data-field]')].every(ta => ta.value.trim().length > 0);
+  const done = scalesOk && textsOk;
+  nextBtn.disabled = !done;
+  nextHint.style.display = done ? 'none' : 'block';
+}
+// scale
+document.querySelectorAll('.scale').forEach(sc=>{
+  const field = sc.dataset.field;
+  sc.querySelectorAll('label').forEach(lb=>{
+    lb.addEventListener('click', ()=>{
+      sc.querySelectorAll('label').forEach(x=>x.classList.remove('sel'));
+      lb.classList.add('sel');
+      lb.querySelector('input').checked = true;
+      post('{{ url_for("save") }}', {item:ITEM, field, value: lb.dataset.val});
+      checkComplete();
+    });
+  });
+});
+// textarea (debounced on input + on blur)
+document.querySelectorAll('textarea[data-field]').forEach(ta=>{
+  let t; const field = ta.dataset.field;
+  const send = ()=> post('{{ url_for("save") }}', {item:ITEM, field, value: ta.value});
+  ta.addEventListener('input', ()=>{ clearTimeout(t); t=setTimeout(send, 700); checkComplete(); });
+  ta.addEventListener('blur', send);
+});
+checkComplete();  // 로드 시(이어하기 포함) 초기 상태 반영
+// next
+document.getElementById('nextBtn').addEventListener('click', ()=>{
+  post('{{ url_for("done", idx=idx) }}', {}, d=>{
+    setTimeout(()=>{ window.location = d.overall ? '{{ url_for("overall") }}' : '/item/'+d.next; }, 250);
+  });
+});
+</script>
+</body></html>

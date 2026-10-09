@@ -1,0 +1,26 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>환각 평가 / Hallucination Evaluation</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body class="login-bg">
+  <div class="login-card">
+    <h1>환각 평가 <span class="ko-inline">/ Hallucination Evaluation</span></h1>
+    <p class="muted">
+      환자 시뮬레이터가 프로필 정보에 위배(모순)되는 내용을 말한 턴을 표시합니다.<br>
+      <span class="ko-inline">Flag the turns where the patient simulator stated information that contradicts the profile.</span>
+    </p>
+    {% if error %}<p class="error">{{ error }}</p>{% endif %}
+    <form method="post" action="{{ url_for('login') }}">
+      <label>이름 / Name (또는 ID)</label>
+      <input type="text" name="name" autofocus autocomplete="off" placeholder="예: Dr. Kim / kim_gi">
+      <button type="submit">시작 / Start</button>
+    </form>
+    <p class="muted small">입력한 이름으로 진행 상황이 저장되며, 다시 로그인하면 이어서 평가합니다.<br>
+      <span class="ko-inline">Your progress is saved under this name and resumes on re-login.</span></p>
+  </div>
+</body>
+</html>

@@ -1,0 +1,28 @@
+# Pinned versions used for the released experiments (CUDA 12.8 wheels for torch).
+# pip install -r requirements.txt --extra-index-url https://download.pytorch.org/whl/cu128
+# (with uv use `uv sync`, or `uv pip install -r requirements.txt --extra-index-url <url> --index-strategy unsafe-best-match`)
+torch==2.8.0
+transformers==4.57.1
+peft==0.17.1
+trl==1.4.0
+accelerate==1.10.1
+datasets==4.8.5
+bitsandbytes==0.49.2
+sentence-transformers==5.1.0
+faiss-cpu==1.13.2
+openai==2.6.1
+requests>=2.32
+aiohttp>=3.10
+networkx==3.4.2
+pandas==2.3.3
+numpy==1.26.4
+scikit-learn==1.7.2
+scipy==1.15.3
+matplotlib==3.10.9
+seaborn==0.13.2
+tqdm>=4.66
+python-dotenv>=1.0
+pyyaml>=6.0
+wandb>=0.19          # optional: --report_to wandb
+flask>=3.0           # optional: human-evaluation web apps
+openpyxl>=3.1        # optional: reading the evaluation spreadsheets

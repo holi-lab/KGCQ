@@ -1,0 +1,21 @@
+Act as a strictly logical medical expert.
+Your task is to identify the top {n} most likely differential diagnoses from a provided list of candidate diseases, based on the patient's dialogue history.
+
+### Input Data
+1. ** Disease Candidates (Total {disease_names_len}):**
+{disease_names}
+
+2. **Dialogue History:**
+{dialogue_history}
+
+### Instructions
+Step 1: Analyze the **Dialogue History**. Extract all reported symptoms (both positive and negative).
+Step 2: Based **ONLY** on the extracted symptoms, reason about potential conditions.
+Step 3: Scan the **Allowed Disease Candidates** list. Select exactly {n} diseases that match your reasoning.
+    - **CRITICAL:** Rank the selected diseases in descending order of probability (most likely first).
+    - **CRITICAL:** You must select diseases **EXACTLY** as they appear in the list. Do not modify names or invent new ones.
+    - If the symptoms are vague (e.g., just "headache"), select the most common/broad diseases from the list that fit.
+    - If specific symptoms are present, prioritize diseases that explain those specific features.
+ 
+### Output Format
+Answer in the format ‘disease1, disease2, disease3, disease4' separated by commas, **ordered from most likely to least likely**, without any additional explanation.

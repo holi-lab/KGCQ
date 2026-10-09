@@ -1,0 +1,7 @@
+# KG-augmentation (rescue) OOG recall, exact vs criterion-matched (relaxed).
+# relaxed@k = top-k contains ANY of the 190 added (out-of-original-graph) diseases = analogue of the "Other" flag. Model: exp6_hg35_hv30_v3a. added=190, paper=338, aug_v3=528.
+# REPORTABLE basis = FULL OOD set (243 test / 128 valid), i.e. expectation over prevalence-matched subsamples; NOT the seed=9 98-subsample (cherry-pick, per ood_adopted_seed9_INSPECTION.csv).
+# Reference (full-243): Other-node OOG@4=0.877 (flags OOG); GraphAug exact OOG@4=0.179; GraphAug relaxed OOG@4=0.490.
+split,n_OOG,exact@1,relaxed@1,exact@2,relaxed@2,exact@3,relaxed@3,exact@4,relaxed@4
+test,243,0.0988,0.2798,0.144,0.3786,0.1687,0.4321,0.1811,0.4897
+valid,128,0.1406,0.2969,0.1719,0.3672,0.2188,0.4297,0.2344,0.4766
