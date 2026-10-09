@@ -22,6 +22,6 @@ PROFILE_DIR = str(P.PROFILE_DIR)
 # ratio-based subgraph builder settings (legacy `--subgraph_method ratio`; the paper runs use paper3hop + tau)
 SUBGRAPH_CFG = dict(feature_mode='cap_own', cap=7, ratio=0.25)
 SUBGRAPH_CFG_BY_KG = {
-    'paper': dict(feature_mode='cap_own', cap=7, ratio=0.25),
-    'augmented_v3': dict(feature_mode='cap_own', cap=7, ratio=0.20),
+    'original': dict(feature_mode='cap_own', cap=7, ratio=0.25),
+    'augmented': dict(feature_mode='cap_own', cap=7, ratio=0.20),
 }

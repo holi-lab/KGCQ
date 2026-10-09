@@ -245,10 +245,10 @@ if __name__ == "__main__":
                         default=os.path.join(REPO, 'data/retriever/test_augmented_symptoms.json'),
                         help='Path to output test dataset JSON file')
     parser.add_argument('--kg_nodes_path', type=str,
-                        default=os.path.join(REPO, 'data/kg/paper/nodes.csv'),
+                        default=os.path.join(REPO, 'data/kg/original/nodes.csv'),
                         help='Path to KG nodes file')
     parser.add_argument('--kg_edges_path', type=str,
-                        default=os.path.join(REPO, 'data/kg/paper/edges.csv'),
+                        default=os.path.join(REPO, 'data/kg/original/edges.csv'),
                         help='Path to KG edges file')
     parser.add_argument('--max_workers', type=int, default=10,
                         help='Maximum number of parallel workers')

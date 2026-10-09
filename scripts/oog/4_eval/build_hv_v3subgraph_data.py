@@ -42,12 +42,12 @@ from inference_exp34 import HGAdapterDetector    # noqa  (인퍼런스와 동일
 
 RATIOS = [int(x) for x in args.ratios.split(',')]
 
-# --- KG: HG 라벨 = augmented_v3 의 528 질환 (학습과 동일 순서), subgraph 도 v3 ---
-hg_nodes = pd.read_csv(C.KG['augmented_v3']['nodes'])
+# --- KG: HG 라벨 = augmented 의 528 질환 (학습과 동일 순서), subgraph 도 v3 ---
+hg_nodes = pd.read_csv(C.KG['augmented']['nodes'])
 disease_names_hg = [r['name'] for _, r in hg_nodes.iterrows() if r['label'] == 'Disease']   # 528, HG head 순서
 
-v3_nodes = pd.read_csv(C.KG['augmented_v3']['nodes'])
-v3_edges = pd.read_csv(C.KG['augmented_v3']['edges'])
+v3_nodes = pd.read_csv(C.KG['augmented']['nodes'])
+v3_edges = pd.read_csv(C.KG['augmented']['edges'])
 # v3 Disease 순서가 v1 과 동일한지 확인(HG 재사용 불변식)
 v3_dis = [r['name'] for _, r in v3_nodes.iterrows() if r['label'] == 'Disease']
 assert v3_dis == disease_names_hg, "v3 Disease 순서가 v1 과 다름 — HG 라벨 정합 깨짐!"

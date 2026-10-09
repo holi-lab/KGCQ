@@ -34,8 +34,8 @@ def disease_list(csv):
     return [r['name'] for _, r in df.iterrows() if r['label'] == 'Disease']
 
 
-paper_d = disease_list(P.KG['paper']['nodes'])
-aug_d = disease_list(P.KG['augmented_v3']['nodes'])
+paper_d = disease_list(P.KG['original']['nodes'])
+aug_d = disease_list(P.KG['augmented']['nodes'])
 tok = AutoTokenizer.from_pretrained(BASE, padding_side="right")
 
 

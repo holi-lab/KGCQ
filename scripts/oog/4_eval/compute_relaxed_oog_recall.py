@@ -5,7 +5,7 @@ as out-of-graph (answers ``Other''), i.e. it only has to RECOGNIZE OOG. The
 KG-augmentation strategy is scored on EXACT disease naming, a strictly harder
 task. To compare on a matched footing we also credit augmentation whenever its
 top-k contains ANY node added by the expansion (the 190 diseases in
-augmented_v3 that are absent from the paper 338-graph) --- the direct analogue
+augmented that are absent from the paper 338-graph) --- the direct analogue
 of answering ``Other''.
 
   exact@k   = frac. of OOG cases whose top-k contains the gold disease
@@ -47,8 +47,8 @@ def diseases(path):
     return set(norm(n) for n, l in zip(df['name'], df[lab]) if norm(l) == 'disease')
 
 
-paper = diseases(f'{KG}/paper/nodes.csv')          # 338
-aug = diseases(f'{KG}/augmented_v3/nodes.csv')      # 528
+paper = diseases(f'{KG}/original/nodes.csv')          # 338
+aug = diseases(f'{KG}/augmented/nodes.csv')      # 528
 added = aug - paper                                 # 190 nodes added by expansion
 
 

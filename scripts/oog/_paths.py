@@ -2,7 +2,7 @@
 
 All paths are relative to the repository root; override with KGCQ_ROOT if needed.
 Layout:
-  data/kg/{paper,augmented_v3}                    knowledge graphs (G: 338 diseases / G+: 528, attributes validated on MIMIC notes)
+  data/kg/{paper,augmented}                    knowledge graphs (G: 338 diseases / G+: 528, attributes validated on MIMIC notes)
   data/oog/profiles                               OOG evaluation profiles and split jsonl files
   data/oog/preprocessed                           full profiles (exp1_id / exp1_ood / exp2_id)
   data/oog/train/data_exp{5,6}[_hv][_v3a]         ratio-sweep training sets and HG eval sets ({valid,test}_combined.json)
@@ -37,7 +37,7 @@ FINAL_TABLES_DIR = RESULTS_DIR / "final_tables"
 PROMPT_DIR = ROOT / "prompts"
 ENV_FILE = ROOT / ".env"
 KG = {name: {"nodes": str(KG_DIR / name / "nodes.csv"), "edges": str(KG_DIR / name / "edges.csv")}
-      for name in ("paper", "augmented_v3")}
+      for name in ("original", "augmented")}
 
 for d in (TRAIN_DATA_DIR, PIPELINE_RESULTS_DIR, HG_RESULTS_DIR, FINAL_TABLES_DIR):
     d.mkdir(parents=True, exist_ok=True)

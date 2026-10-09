@@ -38,8 +38,8 @@ def diseases(p):
     return set(norm(n) for n, l in zip(df['name'], df[lab]) if norm(l) == 'disease')
 
 
-paper = diseases(f'{KG}/paper/nodes.csv')
-aug = diseases(f'{KG}/augmented_v3/nodes.csv')
+paper = diseases(f'{KG}/original/nodes.csv')
+aug = diseases(f'{KG}/augmented/nodes.csv')
 added = aug - paper                                        # 190
 
 

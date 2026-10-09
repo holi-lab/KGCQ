@@ -40,3 +40,4 @@ results/hg_standalone/test_predictions.json
 results/oog/pipeline/
 results/oog/hg_sweep/
 figure/*.pdf
+logs/

@@ -475,10 +475,10 @@ Examples:
                         default=os.path.join(REPO, 'data/retriever/train_augmented_symptoms.json'),
                         help='Path to training data (train_augmented_symptoms.json)')
     parser.add_argument('--kg_nodes_path', type=str,
-                        default=os.path.join(REPO, 'data/kg/paper/nodes.csv'),
+                        default=os.path.join(REPO, 'data/kg/original/nodes.csv'),
                         help='Path to KG nodes file')
     parser.add_argument('--kg_edges_path', type=str,
-                        default=os.path.join(REPO, 'data/kg/paper/edges.csv'),
+                        default=os.path.join(REPO, 'data/kg/original/edges.csv'),
                         help='Path to KG edges file')
     
     # 학습 설정

@@ -2,7 +2,7 @@
 
 inference.py 의 exp3/exp4 변형:
   - HG = adapter-only → base+adapter 로딩(HGAdapterDetector)
-  - 라벨/KG: exp3 = paper(338+Other=339) / exp4 = augmented_v3(528)
+  - 라벨/KG: exp3 = paper(338+Other=339) / exp4 = augmented(528)
   - 프로필: ID = paper split_1210/clf/test_w_persona.json (172) / OOD = exp2_id (exp2 test strict-OOD 74)
   - gold: ID = disease_mapped(paper) / OOD: exp3='Other', exp4=disease_mapped(aug rescued)
   - 추론 루프(환자sim → HG top_k → 우리 subgraph(+exp3 OOD시 Other note) → HV 대화 → 진단) = inference.py 그대로
@@ -108,15 +108,15 @@ def main():
                     help='질병 선택: ratio(기본,우리 build_subgraph) / paper3hop(paper extract_subgraph_3hop, 3-hop+tau)')
     ap.add_argument('--tau', type=float, default=0.005, help='paper3hop 의 prob_threshold(tau)')
     ap.add_argument('--tag_suffix', default='', help='출력 태그 접미사(예: _paperhv) — 기존 결과 보존용')
-    ap.add_argument('--kg', default=None, help='KG 오버라이드(예: augmented_v3); 미지정시 exp 기본(paper/augmented)')
+    ap.add_argument('--kg', default=None, help='KG 오버라이드(예: augmented); 미지정시 exp 기본(paper/augmented)')
     args = ap.parse_args()
     # CUDA_VISIBLE_DEVICES 는 파일 상단에서 이미 설정됨 (torch import 전)
 
     EXP = args.exp
-    kg_name = args.kg if args.kg else ('paper' if EXP in ('exp3', 'exp5') else 'augmented_v3')
+    kg_name = args.kg if args.kg else ('original' if EXP in ('exp3', 'exp5') else 'augmented')
     sg_cfg = C.SUBGRAPH_CFG_BY_KG.get(kg_name, C.SUBGRAPH_CFG)
-    PAPER = dis_set(C.KG['paper']['nodes'])
-    AUG = dis_set(C.KG['augmented_v3']['nodes'])
+    PAPER = dis_set(C.KG['original']['nodes'])
+    AUG = dis_set(C.KG['augmented']['nodes'])
 
     nodes = pd.read_csv(C.KG[kg_name]['nodes'])
     edges = pd.read_csv(C.KG[kg_name]['edges'])

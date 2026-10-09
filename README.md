@@ -34,7 +34,7 @@ Chain-of-Diagnosis baseline. Physicians preferred the specificity-augmented simu
 textbook and reformulated so that diseases share attribute nodes: 338 `disease` nodes connected to 847 `symptom`,
 266 `cause` and 282 `risk_factor` nodes through 3,935 edges (`caused_by`, `can_cause`, `is_a_risk_factor_of`).
 The shared attributes make cross-disease comparison possible, which is what discriminative questioning needs.
-(`data/kg/paper`; Appendix A.1.)
+(`data/kg/original`; Appendix A.1.)
 
 **Hypothesis Generator.** P(disease | H_t) = sigmoid(W · LLM_HG(H_t) + b) on the final hidden state of the last
 token; trained as multi-label classification on full and randomly truncated synthetic dialogues (20% of the
@@ -142,8 +142,8 @@ dialogues from the profiles with `scripts/2_synth`, or obtain the released files
 
 | Knowledge graph | Diseases | Symptom / Cause / Risk-factor nodes | Edges | Role |
 |---|---|---|---|---|
-| `data/kg/paper` | 338 | 847 / 266 / 282 | 3,935 | G, all main experiments |
-| `data/kg/augmented_v3` | 528 | 1,011 / 266 / 282 | 4,974 | G+ (Table 6): 190 added diseases whose mined attributes were validated against MIMIC-IV notes; label space and graph of the KG-augmentation setting |
+| `data/kg/original` | 338 | 847 / 266 / 282 | 3,935 | G, all main experiments |
+| `data/kg/augmented` | 528 | 1,011 / 266 / 282 | 4,974 | G+ (Table 6): 190 added diseases with LLM-mined attributes; label space and graph of the KG-augmentation setting |
 
 Local layout expected by the scripts (MIMIC-derived):
 
@@ -246,7 +246,7 @@ tau (the retrained HG yields about 40 subgraph lines per turn versus about 22 fo
 ### Out-of-graph study
 
 "Other" node = `exp5` (HG labels 338 + Other, graph `paper`), KG augmentation = `exp6` (528 labels, inference on
-`augmented_v3`); `exp3`/`exp4` are the pilot sweep. Final models: `exp5_hg_r30` + `exp5_hv_r25_symcentric`, and
+`augmented`); `exp3`/`exp4` are the pilot sweep. Final models: `exp5_hg_r30` + `exp5_hv_r25_symcentric`, and
 `exp6_hg_r35` + `exp6_hv_r30_symcentric_v3a`. The OOG experiments linearise subgraphs attribute-centrically
 (`'s' is a symptom of [d1, d2]`, `fmt="symptom"`).
 
@@ -254,20 +254,19 @@ tau (the retrained HG yields about 40 subgraph lines per turn versus about 22 fo
 cd scripts/oog
 python 3_train/train_hg_exp34.py exp5 30 0                          # <exp> <ratio> <gpu>; exp6 35 likewise
 python 3_train/train_hv_exp34.py exp5 25 0 symcentric
-python 4_eval/build_hv_v3subgraph_data.py --gpu 0 --hg_ratio 35     # exp6 HV training subgraphs on augmented_v3 (HG-predicted)
+python 4_eval/build_hv_v3subgraph_data.py --gpu 0 --hg_ratio 35     # exp6 HV training subgraphs on augmented (HG-predicted)
 HV_DATA_DIR=../../data/oog/train/data_exp6_hv_v3a HV_TAG=_v3a python 3_train/train_hv_exp34.py exp6 30 0 symcentric
 python 4_eval/eval_hg_valid.py 0 --exp exp5,exp6 --ratios 30,35     # validation top-4 of the HG adapters (HG table)
 python 4_eval/eval_paper_hg.py 0                                    # main-pipeline HG on the OOG eval sets (PAPER_HG_DIR to override)
 python 4_eval/inference_exp34.py --exp exp5 --hg_ratio 30 --hv_ratio 25 --gpu 0 --id_set balanced --ood_set clean243 \
     --hv_dir ../../models/oog/exp5_hv_r25_symcentric_Qwen2.5-7B --subgraph_method paper3hop --tau 0.005 --subgraph_format symptom --tag_suffix _sweep
-python 4_eval/inference_exp34.py --exp exp6 --hg_ratio 35 --hv_ratio 30 --gpu 0 --kg augmented_v3 --id_set balanced --ood_set clean243 \
+python 4_eval/inference_exp34.py --exp exp6 --hg_ratio 35 --hv_ratio 30 --gpu 0 --kg augmented --id_set balanced --ood_set clean243 \
     --hv_dir ../../models/oog/exp6_hv_r30_symcentric_v3a_Qwen2.5-7B --subgraph_method paper3hop --tau 0.005 --subgraph_format symptom --tag_suffix _v3a
 python 4_eval/make_hg_csv_3to1.py; python 4_eval/make_pipeline_csv.py valid; python 4_eval/make_pipeline_csv.py test
 python 4_eval/make_seed9_inference_results.py; python 4_eval/compute_relaxed_oog_recall.py; python 4_eval/make_exp6_recognition_recall.py
 ```
 `--id_set valid --ood_set valid128` runs the validation sets used for ratio selection. The expanded graph G+
-(`data/kg/augmented_v3`) adds 190 diseases whose mined attributes were validated against MIMIC-IV notes; per-disease
-validation statistics are in `results/oog/kg_symptom_validation_summary.csv` and `kg_prune_summary.csv` (Appendix A.2).
+(`data/kg/augmented`) adds 190 diseases with attributes mined from diagnostic schemas (Appendix A.2).
 Evaluation sets: ID = the 275 profiles, OOG = 243 clean test profiles reported on a 98-case prevalence-matched
 subsample; validation 304 + 128. Training sets (`data/oog/train/data_exp{5,6}[_hv][_v3a]`, HG eval sets
 `{valid,test}_combined.json`) are part of the data package. All OOG scripts share `scripts/oog/_paths.py` (data in

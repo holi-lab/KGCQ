@@ -15,7 +15,7 @@ def disease_names_from_nodes(nodes_csv):
     return set(str(r["name"]).strip().lower() for _, r in df.iterrows() if r["label"] == "Disease")
 
 
-paper = disease_names_from_nodes(P.KG["paper"]["nodes"])
+paper = disease_names_from_nodes(P.KG["original"]["nodes"])
 W_IG, W_OOG = 0.75, 0.25   # 3:1
 
 

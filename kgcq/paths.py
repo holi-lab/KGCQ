@@ -18,8 +18,8 @@ RESULT_DIR = ROOT / "results"
 ENV_FILE = ROOT / ".env"
 
 # Default knowledge graph (the 338-disease graph used in the main experiments)
-KG_NODES = KG_DIR / "paper" / "nodes.csv"
-KG_EDGES = KG_DIR / "paper" / "edges.csv"
+KG_NODES = KG_DIR / "original" / "nodes.csv"
+KG_EDGES = KG_DIR / "original" / "edges.csv"
 
 # Prompts
 HV_DOCTOR_PROMPT = PROMPT_DIR / "hv_doctor.txt"                     # Hypothesis Verifier (inference + SFT)

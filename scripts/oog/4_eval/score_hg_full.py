@@ -33,11 +33,11 @@ def dl(csv):
     return [r['name'] for _, r in df.iterrows() if r['label'] == 'Disease']
 
 
-PAPER = set(str(n).strip().lower() for n in dl(f'{P.KG_DIR}/paper/nodes.csv'))
+PAPER = set(str(n).strip().lower() for n in dl(f'{P.KG_DIR}/original/nodes.csv'))
 
 
 def labels_of(exp):
-    return dl(f'{P.KG_DIR}/paper/nodes.csv') + ['Other'] if exp == 'exp3' else dl(f'{P.KG_DIR}/augmented_v3/nodes.csv')
+    return dl(f'{P.KG_DIR}/original/nodes.csv') + ['Other'] if exp == 'exp3' else dl(f'{P.KG_DIR}/augmented/nodes.csv')
 
 
 def is_ood(gold_lower, exp):
