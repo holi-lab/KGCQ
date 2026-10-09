@@ -42,8 +42,8 @@ from inference_exp34 import HGAdapterDetector    # noqa  (인퍼런스와 동일
 
 RATIOS = [int(x) for x in args.ratios.split(',')]
 
-# --- KG: HG 라벨은 v1 augmented(학습 그대로), subgraph 는 v3 ---
-hg_nodes = pd.read_csv(C.KG['augmented']['nodes'])
+# --- KG: HG 라벨 = augmented_v3 의 528 질환 (학습과 동일 순서), subgraph 도 v3 ---
+hg_nodes = pd.read_csv(C.KG['augmented_v3']['nodes'])
 disease_names_hg = [r['name'] for _, r in hg_nodes.iterrows() if r['label'] == 'Disease']   # 528, HG head 순서
 
 v3_nodes = pd.read_csv(C.KG['augmented_v3']['nodes'])

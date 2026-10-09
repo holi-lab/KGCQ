@@ -37,7 +37,7 @@ PAPER = set(str(n).strip().lower() for n in dl(f'{P.KG_DIR}/paper/nodes.csv'))
 
 
 def labels_of(exp):
-    return dl(f'{P.KG_DIR}/paper/nodes.csv') + ['Other'] if exp == 'exp3' else dl(f'{P.KG_DIR}/augmented/nodes.csv')
+    return dl(f'{P.KG_DIR}/paper/nodes.csv') + ['Other'] if exp == 'exp3' else dl(f'{P.KG_DIR}/augmented_v3/nodes.csv')
 
 
 def is_ood(gold_lower, exp):

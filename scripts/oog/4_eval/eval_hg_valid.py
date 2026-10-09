@@ -35,7 +35,7 @@ def disease_list(csv):
 
 
 paper_d = disease_list(P.KG['paper']['nodes'])
-aug_d = disease_list(P.KG['augmented']['nodes'])
+aug_d = disease_list(P.KG['augmented_v3']['nodes'])
 tok = AutoTokenizer.from_pretrained(BASE, padding_side="right")
 
 

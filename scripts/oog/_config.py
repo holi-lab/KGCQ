@@ -23,7 +23,5 @@ PROFILE_DIR = str(P.PROFILE_DIR)
 SUBGRAPH_CFG = dict(feature_mode='cap_own', cap=7, ratio=0.25)
 SUBGRAPH_CFG_BY_KG = {
     'paper': dict(feature_mode='cap_own', cap=7, ratio=0.25),
-    'augmented': dict(feature_mode='cap_own', cap=7, ratio=0.11),
-    'augmented_v2': dict(feature_mode='cap_own', cap=7, ratio=0.18),
     'augmented_v3': dict(feature_mode='cap_own', cap=7, ratio=0.20),
 }

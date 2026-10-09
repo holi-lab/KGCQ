@@ -2,7 +2,7 @@
 
 차이 (train_hg.py[exp1] 대비):
   exp3: 라벨 = paper 338 + 'Other' = 339,  data_exp3,  평가 OOD = gold 'Other'
-  exp4: 라벨 = augmented 528 (Other 없음),  data_exp4,  평가 OOD = gold ∉ paper(=rescued)
+  exp4: 라벨 = augmented_v3 528 (Other 없음),  data_exp4,  평가 OOD = gold ∉ paper(=rescued)
   데이터 = ratio sweep (train_r{R}.json) + valid_combined + test_combined
   출력 = model/{exp}_hg_r{R}_Qwen2.5-7B,  results/{exp}_r{R}.json
 모델/LoRA/TrainingArguments/compute_metrics/adapter저장은 train_hg.py 와 동일(paper 보존).
@@ -62,7 +62,7 @@ def disease_list(csv):
 if _USE_PAPER:   # exp3, exp5
     disease_names = disease_list(f"{P.KG_DIR}/paper/nodes.csv") + ['Other']     # 339
 else:            # exp4, exp6
-    disease_names = disease_list(f"{P.KG_DIR}/augmented/nodes.csv")             # 528 (Other 없음)
+    disease_names = disease_list(f"{P.KG_DIR}/augmented_v3/nodes.csv")          # 528 (Other 없음)
 id2label = {i: n for i, n in enumerate(disease_names)}
 label2id = {n: i for i, n in enumerate(disease_names)}
 num_labels = len(disease_names)

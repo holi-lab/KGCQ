@@ -2,11 +2,10 @@
 
 All paths are relative to the repository root; override with KGCQ_ROOT if needed.
 Layout:
-  data/kg/{paper,augmented,augmented_v3}          knowledge graphs (338 / 528 LLM-mined / 528 MIMIC-validated)
+  data/kg/{paper,augmented_v3}                    knowledge graphs (G: 338 diseases / G+: 528, attributes validated on MIMIC notes)
   data/oog/profiles                               OOG evaluation profiles and split jsonl files
   data/oog/preprocessed                           full profiles (exp1_id / exp1_ood / exp2_id)
   data/oog/train/data_exp{5,6}[_hv][_v3a]         ratio-sweep training sets and HG eval sets ({valid,test}_combined.json)
-  data/oog/kg_v3                                  MIMIC-note validation artefacts for the augmented graph
   models/oog                                      HG/HV adapters of the sweeps (+ base models under models/base)
   results/oog                                     metrics, CSV tables, per-case results
 """
@@ -26,8 +25,6 @@ PREPROCESSED_DIR = OOG_DATA / "preprocessed"
 DIALOGUE_DIR = OOG_DATA / "dialogues"
 OOD_SPLIT_DIR = OOG_DATA / "ood_split"
 TRAIN_DATA_DIR = OOG_DATA / "train"
-KG_V3_DIR = OOG_DATA / "kg_v3"
-SPLIT_INPUT_DIR = OOG_DATA / "profile_split_inputs"
 MODEL_DIR = ROOT / "models" / "oog"
 _BASE_LOCAL = ROOT / "models" / "base" / "Qwen2.5-7B-Instruct"
 _EMB_LOCAL = ROOT / "models" / "base" / "all-MiniLM-L6-v2"
@@ -40,10 +37,7 @@ FINAL_TABLES_DIR = RESULTS_DIR / "final_tables"
 PROMPT_DIR = ROOT / "prompts"
 ENV_FILE = ROOT / ".env"
 KG = {name: {"nodes": str(KG_DIR / name / "nodes.csv"), "edges": str(KG_DIR / name / "edges.csv")}
-      for name in ("paper", "augmented", "augmented_v3")}
-# MIMIC-IV note sections (restricted; needed only to rebuild the MIMIC-validated graph augmented_v3)
-MIMIC_NOTE_SECTION_CSV = os.environ.get("MIMIC_NOTE_SECTION_CSV", str(OOG_DATA / "mimic" / "note_section.csv"))
-OOG_PROFILE_POOL_JSONL = str(SPLIT_INPUT_DIR / "profiles_paperKG_OOD_50289.jsonl")
+      for name in ("paper", "augmented_v3")}
 
-for d in (TRAIN_DATA_DIR, PIPELINE_RESULTS_DIR, HG_RESULTS_DIR, FINAL_TABLES_DIR, KG_V3_DIR):
+for d in (TRAIN_DATA_DIR, PIPELINE_RESULTS_DIR, HG_RESULTS_DIR, FINAL_TABLES_DIR):
     d.mkdir(parents=True, exist_ok=True)

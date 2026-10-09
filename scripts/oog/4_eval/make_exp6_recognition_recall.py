@@ -19,7 +19,7 @@ def dlist(csvp):
 
 
 paper = dlist(f"{P.KG_DIR}/paper/nodes.csv")          # 338
-aug = dlist(f"{P.KG_DIR}/augmented/nodes.csv")        # 528
+aug = dlist(f"{P.KG_DIR}/augmented_v3/nodes.csv")     # 528
 aug_only = aug - paper                                    # 528∖338 = 원래 그래프 밖(rescued) 질병
 print(f"paper={len(paper)}  aug={len(aug)}  aug_only(528∖338)={len(aug_only)}")
 assert paper <= aug, "paper ⊄ aug (검증 실패)"

@@ -94,7 +94,7 @@ Recall@4 at 0.414.
 ```
 kgcq/              library: graph, subgraph extraction, HG/HV wrappers, simulator, dialogue loops, metrics
 prompts/           all prompts (HV, synthetic clinician, simulator personas, profile construction)
-data/kg/           the three knowledge graphs (public); other data are MIMIC-derived and kept local
+data/kg/           the two knowledge graphs G and G+ (public); other data are MIMIC-derived and kept local
 scripts/
   2_synth/         oracle subgraphs, synthetic dialogues, HG training rows
   3_train/         train_hg.py, train_hv.py, train_hg_generative.py
@@ -143,8 +143,7 @@ dialogues from the profiles with `scripts/2_synth`, or obtain the released files
 | Knowledge graph | Diseases | Symptom / Cause / Risk-factor nodes | Edges | Role |
 |---|---|---|---|---|
 | `data/kg/paper` | 338 | 847 / 266 / 282 | 3,935 | G, all main experiments |
-| `data/kg/augmented` | 528 | 1,167 / 594 / 457 | 7,473 | G+ (LLM-mined, Table 6); label space of the KG-augmentation HG |
-| `data/kg/augmented_v3` | 528 | 1,011 / 266 / 282 | 4,974 | G+ with the new attributes validated against MIMIC notes; used for the final KG-augmentation results |
+| `data/kg/augmented_v3` | 528 | 1,011 / 266 / 282 | 4,974 | G+ (Table 6): 190 added diseases whose mined attributes were validated against MIMIC-IV notes; label space and graph of the KG-augmentation setting |
 
 Local layout expected by the scripts (MIMIC-derived):
 
@@ -266,9 +265,9 @@ python 4_eval/inference_exp34.py --exp exp6 --hg_ratio 35 --hv_ratio 30 --gpu 0 
 python 4_eval/make_hg_csv_3to1.py; python 4_eval/make_pipeline_csv.py valid; python 4_eval/make_pipeline_csv.py test
 python 4_eval/make_seed9_inference_results.py; python 4_eval/compute_relaxed_oog_recall.py; python 4_eval/make_exp6_recognition_recall.py
 ```
-`--id_set valid --ood_set valid128` runs the validation sets used for ratio selection. The expanded graphs
-(`data/kg/augmented`, `augmented_v3`) are built by `4_eval/build_oog_hpi.py`, `validate_kg_symptoms_mimic.py`,
-`kg_prune_compact.py` and `build_augmented_kg_v3.py` (Appendix A.2; needs MIMIC-IV notes).
+`--id_set valid --ood_set valid128` runs the validation sets used for ratio selection. The expanded graph G+
+(`data/kg/augmented_v3`) adds 190 diseases whose mined attributes were validated against MIMIC-IV notes; per-disease
+validation statistics are in `results/oog/kg_symptom_validation_summary.csv` and `kg_prune_summary.csv` (Appendix A.2).
 Evaluation sets: ID = the 275 profiles, OOG = 243 clean test profiles reported on a 98-case prevalence-matched
 subsample; validation 304 + 128. Training sets (`data/oog/train/data_exp{5,6}[_hv][_v3a]`, HG eval sets
 `{valid,test}_combined.json`) are part of the data package. All OOG scripts share `scripts/oog/_paths.py` (data in
