@@ -1,4 +1,4 @@
-# 支持英文
+"""Adapted Chain-of-Diagnosis baseline: the CoD chatbot with its disease database rebuilt from our knowledge graph."""
 import os
 import platform
 import torch
@@ -7,18 +7,13 @@ from transformers import AutoTokenizer
 from transformers import AutoModelForCausalLM
 import argparse
 from transformers import TextIteratorStreamer
-from transformers.generation.utils import GenerationConfig
 import json
 import re
 
+import sys
 import numpy as np
-from retrieve_utils import (
-    construct_flatindex_from_embeddings, 
-     convert_index_to_gpu,
-     encoder
-)
-import json
-from transformers import LlamaForCausalLM
+sys.path.insert(0, os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", "retriever"))
+from retrieve_utils import construct_flatindex_from_embeddings, encoder  # noqa: E402
 
 
 class DiagnosisChatbot():
@@ -219,7 +214,7 @@ class DiagnosisChatbot():
             
             # if max_value > self.confidence_threshold and (self.get_sym_num(self.sym_info) >= self.min_sym_num or max_value > self.confidence_threshold +0.2 ):
             if max_value > self.confidence_threshold:
-                # 诊断
+                # diagnosis
                 if is_en:
                     t4_1 = '\n\n## Diagnosis:\n'
                 else:
@@ -364,7 +359,7 @@ def main(args):
             print(pre_string)
             continue
         
-        print(f"DiagnosisGPT: ", end="", flush=True)
+        print("DiagnosisGPT: ", end="", flush=True)
         for char in chatbot.chat(query):
             print(char,end='',flush = True)
         print('')

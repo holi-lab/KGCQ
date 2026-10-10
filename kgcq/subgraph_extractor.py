@@ -1,13 +1,5 @@
-"""Hypothesis-driven subgraph extraction (paper Sec. 3.3.2).
-
-extract_subgraph_3hop   : KGCQ. anchors = top-n HG diseases; 3-hop expansion; competing diseases kept only if
-                          HG probability >= tau.
-extract_subgraph_2hop   : "+KG" ablation without the HG. anchors = attribute nodes matched to the patient utterance;
-                          diseases sharing >= threshold anchors are expanded to their attributes.
-extract_subgraph_1hop   : anchors' direct attributes only.
-extract_subgraph_3hop_clf_lm : generative-HG baseline (no probabilities): competing diseases kept if they share
-                          >= 30% of an anchor's attributes (Appendix: Generative Hypothesis Generator).
-extract_oracle_subgraph : 3-hop expansion from the gold disease(s) (synthetic dialogue generation).
+"""Hypothesis-driven subgraph extraction: 3-hop expansion from the HG's top-n diseases with threshold tau (KGCQ),
+1/2-hop variants for the ablations, and the gold-anchored oracle subgraph for synthetic data.
 """
 
 

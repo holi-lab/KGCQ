@@ -1,3 +1,4 @@
+"""Encoder wrappers and the rerank rule Sim(S_pos, D) - 0.3 * Sim(S_neg, D) used by the retriever HG."""
 import sys
 sys.path += ['./']
 import os
@@ -255,7 +256,6 @@ def convert_index_to_gpu(index, faiss_gpu_index, useFloat16=False):
         co.useFloat16 = useFloat16
         index = faiss.index_cpu_to_gpu(res, faiss_gpu_index, index, co)
     else:
-        global gpu_resources
         if len(gpu_resources) == 0:
             import torch
             for i in range(torch.cuda.device_count()):

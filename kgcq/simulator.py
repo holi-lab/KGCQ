@@ -1,15 +1,4 @@
-"""Patient simulator (PatientSim + low-specificity symptom reporting) and HV response handling.
-
-generate_patient_response_w_persona      : OUR simulator (PatientSim persona + low-specificity augmentation).
-generate_patient_response_w_persona_org  : the original PatientSim prompt construction (used as the baseline in
-                                           the physician preference study, Sec. 6.3).
-generate_doctor_response                 : single-turn HV call (prompt with {subgraph_text}, {dialogue_text}).
-generate_doctor_response_multiturn       : chat-style HV call used by the no-KG baseline.
-parse_response                           : <question>..</question> / <diagnosis>..</diagnosis> parsing.
-
-Following PatientSim, the simulator conditions each response on the profile and the latest doctor utterance
-only (not the whole dialogue history); see the paper's Limitations.
-"""
+"""Patient simulator (PatientSim + low-specificity symptom reporting) and HV response generation/parsing."""
 import json
 import random
 import re

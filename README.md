@@ -39,7 +39,7 @@ The shared attributes make cross-disease comparison possible, which is what disc
 **Hypothesis Generator.** P(disease | H_t) = sigmoid(W · LLM_HG(H_t) + b) on the final hidden state of the last
 token; trained as multi-label classification on full and randomly truncated synthetic dialogues (20% of the
 dialogue length as truncation points) so that it works at every stage of the conversation. Alternatives examined in
-the paper, an embedding retriever (SapBERT) and a generative HG, reach lower Recall@4 (Fig. 3). (`scripts/3_train/train_hg.py`.)
+the paper, an embedding retriever (SapBERT) and a generative HG, reach lower Recall@4 (Fig. 3). (`scripts/2_train/train_hg.py`.)
 
 **Subgraph extraction and linearisation.** `kgcq.subgraph_extractor.extract_subgraph_3hop` performs the 3-hop
 expansion with the *tau* filter; `kgcq.graph.get_subgraph_text` turns it into statements such as
@@ -48,7 +48,7 @@ expansion with the *tau* filter; `kgcq.graph.get_subgraph_text` turns it into st
 
 **Hypothesis Verifier.** Supervised fine-tuning (LoRA) on synthetic dialogues: prompt = `prompts/hv_doctor.txt`
 filled with the subgraph and the history so far, target = `<think> reasoning </think>` followed by `<question>` or
-`<diagnosis>`. (`scripts/3_train/train_hv.py`.)
+`<diagnosis>`. (`scripts/2_train/train_hv.py`.)
 
 **Patient simulator.** PatientSim's four persona dimensions (language proficiency A/B/C, personality, recall level,
 confusion level) plus a *symptom specificity* trait that keeps location, character, duration, onset and
@@ -96,13 +96,12 @@ kgcq/              library: graph, subgraph extraction, HG/HV wrappers, simulato
 prompts/           all prompts (HV, synthetic clinician, simulator personas, profile construction)
 data/kg/           the two knowledge graphs G and G+ (public); other data are MIMIC-derived and kept local
 scripts/
-  2_synth/         oracle subgraphs, synthetic dialogues, HG training rows
-  3_train/         train_hg.py, train_hv.py, train_hg_generative.py
-  4_infer/         run_dialogue.py (kgcq | kg_only | no_kg | hg_generative), smoke_test_offline.py
-  5_eval/          per-run analysis, HG standalone recall, figures, table collection
+  1_synth/         oracle subgraphs, synthetic dialogues, HG training rows
+  2_train/         train_hg.py, train_hv.py, train_hg_generative.py
+  3_infer/         run_dialogue.py (kgcq | kg_only | no_kg | hg_generative)
+  4_eval/          per-run analysis, HG standalone recall, figures, table collection
   baselines/       SapBERT retriever HG, adapted Chain-of-Diagnosis
   oog/             out-of-graph study ("Other" node, KG augmentation)
-results/           aggregated numbers behind the paper's tables
 figure/            framework figure
 ```
 
@@ -129,16 +128,12 @@ cp .env.example .env                                       # API keys
 * One 80 GB GPU is enough for inference (HG + HV about 30 GB) and HG training (about 2.7 h); HV training takes
   about 5.6 h. All paths are relative to the repository root (`kgcq/paths.py`, override with `KGCQ_ROOT`).
 
-Quick check without API keys (loads HG and HV, runs one dialogue with a scripted patient):
-```bash
-python scripts/4_infer/smoke_test_offline.py --gpu 0
-```
 
 ### Data
 
 Everything except the knowledge graphs derives from MIMIC-IV / MIMIC-IV-ED / MIMIC-IV-Note (PhysioNet, credentialed
 access) and is not redistributed; `.gitignore` excludes it. Credentialed users can regenerate the synthetic
-dialogues from the profiles with `scripts/2_synth`, or obtain the released files from the authors.
+dialogues from the profiles with `scripts/1_synth`, or obtain the released files from the authors.
 
 | Knowledge graph | Diseases | Symptom / Cause / Risk-factor nodes | Edges | Role |
 |---|---|---|---|---|
@@ -180,28 +175,28 @@ of the HG-free ablation in `kgcq/symptom_extractor.py`.
 
 | Step | Script | Input -> output |
 |---|---|---|
-| 2a Oracle subgraphs | `scripts/2_synth/build_oracle_subgraphs.py` | profiles -> per-patient subgraph for the synthetic clinician |
-| 2b Synthetic dialogues | `scripts/2_synth/generate_dialogues.py` | profiles + subgraphs -> dialogues |
-| 2c HG rows | `scripts/2_synth/build_hg_softlabel.py` | dialogues -> truncated histories (Recall@4 >= 0.5 filter) |
-| 3a HG | `scripts/3_train/train_hg.py` | rows -> classification head (LoRA r16, lr 1e-5, 10 epochs, early stop on Recall@4) |
-| 3b HV | `scripts/3_train/train_hv.py` | HV dialogues -> LoRA adapter (lr 1e-5, 2 epochs, prompt tokens masked) |
-| 4 Inference | `scripts/4_infer/run_dialogue.py` | evaluation profiles -> `runs/<tag>/dialog.json`, `metrics.json` (resumable) |
-| 5 Analysis | `scripts/5_eval/summarize_run.py`, `collect_tables.py`, `plot_robustness.py`, `plot_hg_recall.py`, `eval_hg_standalone.py` | persona breakdown, HG / subgraph recall, figures |
+| 2a Oracle subgraphs | `scripts/1_synth/build_oracle_subgraphs.py` | profiles -> per-patient subgraph for the synthetic clinician |
+| 2b Synthetic dialogues | `scripts/1_synth/generate_dialogues.py` | profiles + subgraphs -> dialogues |
+| 2c HG rows | `scripts/1_synth/build_hg_softlabel.py` | dialogues -> truncated histories (Recall@4 >= 0.5 filter) |
+| 3a HG | `scripts/2_train/train_hg.py` | rows -> classification head (LoRA r16, lr 1e-5, 10 epochs, early stop on Recall@4) |
+| 3b HV | `scripts/2_train/train_hv.py` | HV dialogues -> LoRA adapter (lr 1e-5, 2 epochs, prompt tokens masked) |
+| 4 Inference | `scripts/3_infer/run_dialogue.py` | evaluation profiles -> `runs/<tag>/dialog.json`, `metrics.json` (resumable) |
+| 5 Analysis | `scripts/4_eval/summarize_run.py`, `collect_tables.py`, `plot_robustness.py`, `plot_hg_recall.py`, `eval_hg_standalone.py` | persona breakdown, HG / subgraph recall, figures |
 
 Defaults reproduce the paper (patient = gpt-4o-mini, 50-turn cap, n = 2, tau = 0.005):
 ```bash
-python scripts/3_train/train_hg.py --output_dir models/hg_qwen2.5-7b_clf_head --gpu 0
-python scripts/3_train/train_hv.py --output_dir models/hv_qwen2.5-7b_sft_lora --gpu 0,1
+python scripts/2_train/train_hg.py --output_dir models/hg_qwen2.5-7b_clf_head --gpu 0
+python scripts/2_train/train_hv.py --output_dir models/hv_qwen2.5-7b_sft_lora --gpu 0,1
 # KGCQ
-python scripts/4_infer/run_dialogue.py --mode kgcq --hv_backend local_finetuned --tag kgcq_n2_tau0.005 --gpu 0
-python scripts/5_eval/summarize_run.py --run runs/kgcq_n2_tau0.005
+python scripts/3_infer/run_dialogue.py --mode kgcq --hv_backend local_finetuned --tag kgcq_n2_tau0.005 --gpu 0
+python scripts/4_eval/summarize_run.py --run runs/kgcq_n2_tau0.005
 # GPT-4.1-mini as verifier: parametric only / +KG (no HG, symptom-anchored 2-hop) / +KG+HG
-python scripts/4_infer/run_dialogue.py --mode no_kg   --hv_backend openai --hv_model gpt-4.1-mini --tag gpt41mini_no_kg
-python scripts/4_infer/run_dialogue.py --mode kg_only --hv_backend openai --hv_model gpt-4.1-mini --top_k 1 --tag gpt41mini_kg_only
-python scripts/4_infer/run_dialogue.py --mode kgcq    --hv_backend openai --hv_model gpt-4.1-mini --tag gpt41mini_kg_hg
+python scripts/3_infer/run_dialogue.py --mode no_kg   --hv_backend openai --hv_model gpt-4.1-mini --tag gpt41mini_no_kg
+python scripts/3_infer/run_dialogue.py --mode kg_only --hv_backend openai --hv_model gpt-4.1-mini --top_k 1 --tag gpt41mini_kg_only
+python scripts/3_infer/run_dialogue.py --mode kgcq    --hv_backend openai --hv_model gpt-4.1-mini --tag gpt41mini_kg_hg
 # other API verifiers, e.g.
-python scripts/4_infer/run_dialogue.py --mode kgcq --hv_backend openrouter --hv_model anthropic/claude-3.5-sonnet --tag kgcq_hv_claude
-python scripts/5_eval/collect_tables.py runs/*      # Recall@1-4 / turns; no arguments: the released numbers
+python scripts/3_infer/run_dialogue.py --mode kgcq --hv_backend openrouter --hv_model anthropic/claude-3.5-sonnet --tag kgcq_hv_claude
+python scripts/4_eval/collect_tables.py runs/*      # Recall@1-4 / turns of each run
 ```
 On a SLURM cluster, submit the launchers from the repository root (`sbatch slurm/train_hg.sh`); they locate
 the repository through `SLURM_SUBMIT_DIR`.
@@ -211,26 +206,25 @@ averaged over dialogues and filled only for k >= |gold| (`kgcq/metrics.py`).
 
 ### Reproduction map
 
-| Paper | Command / script | Released numbers |
-|---|---|---|
-| Table 2 (ablation) | `run_dialogue.py --mode no_kg \| kg_only \| kgcq --hv_backend openai --hv_model gpt-4.1-mini` | `results/main/table2_*` |
-| Table 3 (verifiers) | `--hv_backend openrouter \| local \| local_finetuned`; CoD: `scripts/baselines/cod/` | `results/main/table3_*` |
-| Table 4 (n, tau; HG Recall@k, Sub Recall) | `--top_k n --tau t`, then `summarize_run.py` | `results/main/table4_*/metrics_anal.json` |
-| Fig. 3 (HG architectures) | `eval_hg_standalone.py`, `scripts/baselines/retriever/retrieve_eval.py`, `plot_hg_recall.py` | `results/hg_standalone/` |
-| Fig. 5 (persona robustness) | `summarize_run.py` on three runs, `plot_robustness.py` | `results/main/*/metrics_anal.json` |
-| Table 5, 9-11 (out-of-graph) | `scripts/oog/` | `results/oog/final_tables/`, `relaxed_oog_recall*.csv` |
-| Table 6 (graph statistics) | `data/kg/` | table above |
-| Table 7 (HG methods end-to-end) | `--mode hg_generative`; retriever runs not preserved | `results/main/table7_generative_hg_ft` |
+| Paper | Command / script |
+|---|---|
+| Table 2 (ablation) | `run_dialogue.py --mode no_kg \| kg_only \| kgcq --hv_backend openai --hv_model gpt-4.1-mini` |
+| Table 3 (verifiers) | `--hv_backend openrouter \| local \| local_finetuned`; CoD: `scripts/baselines/cod/` |
+| Table 4 (n, tau; HG Recall@k, Sub Recall) | `--top_k n --tau t`, then `summarize_run.py` |
+| Fig. 3 (HG architectures) | `eval_hg_standalone.py`, `scripts/baselines/retriever/retrieve_eval.py`, `plot_hg_recall.py` |
+| Fig. 5 (persona robustness) | `summarize_run.py` on three runs, `plot_robustness.py` |
+| Table 5, 9-11 (out-of-graph) | `scripts/oog/` (`inference_exp34.py`, then the table scripts in `2_eval/`) |
+| Table 6 (graph statistics) | `data/kg/` (table above) |
+| Table 7 (HG methods end-to-end) | `--mode hg_generative`; retriever runs not preserved |
 
-`results/main/<row>/metrics.json` holds Recall@1-4 and turns of the run behind each table row (`provenance.txt`
-names the original runs); `results/oog/` the out-of-graph tables; `results/hg_standalone/` the HG test metrics
-(classification head 0.338 / 0.444 / 0.521 / 0.560 at k = 1..4); `results/retriever/` the SapBERT encoder sweeps.
+Each run directory under `runs/` ends with `metrics.json` (Recall@1-4, turns) and, after `summarize_run.py`,
+`metrics_anal.json` (per-persona recall, HG Recall@k, Sub Recall, subgraph size).
 
 ### Reproduction check
 
 The pipeline was re-run from a clean checkout (environment from `uv sync`, one A100-80GB per SLURM job, released
 MIMIC-derived data): HG training 1h32m (early-stopped at epoch 6), HV training 6h06m, inference on the 288
-evaluation dialogues 2h09m. `results/reproduction/` holds the metrics.
+evaluation dialogues 2h09m.
 
 | | R@1 | R@2 | R@3 | R@4 | Turns | Sub Recall |
 |---|---|---|---|---|---|---|
@@ -243,27 +237,33 @@ Run-to-run variation of this size is expected: training is seeded but not bit-re
 simulator samples at temperature 0.8, and the HG's probability calibration changes the number of diseases that pass
 tau (the retrained HG yields about 40 subgraph lines per turn versus about 22 for the released one).
 
+The out-of-graph study was re-run the same way (HG and HV retrained for both strategies, full OOG test set of 243
+cases rather than the 98-case subsample of the paper). KG augmentation reproduces closely (OOG Recall@4 0.179 vs
+0.179 for the released run, IG Recall@4 0.402 vs 0.414). The "Other" node lands at a slightly different operating
+point (OOG Recall@4 0.770 vs 0.877, IG Recall@4 0.380 vs 0.313; prevalence-weighted overall Recall@4 0.482 vs 0.461),
+as expected from the sensitivity of this trade-off to the training OOG ratio (Appendix A.2).
+
 ### Out-of-graph study
 
-"Other" node = `exp5` (HG labels 338 + Other, graph `paper`), KG augmentation = `exp6` (528 labels, inference on
+"Other" node = `exp5` (HG labels 338 + Other, graph `original`), KG augmentation = `exp6` (528 labels, inference on
 `augmented`); `exp3`/`exp4` are the pilot sweep. Final models: `exp5_hg_r30` + `exp5_hv_r25_symcentric`, and
 `exp6_hg_r35` + `exp6_hv_r30_symcentric_v3a`. The OOG experiments linearise subgraphs attribute-centrically
 (`'s' is a symptom of [d1, d2]`, `fmt="symptom"`).
 
 ```bash
 cd scripts/oog
-python 3_train/train_hg_exp34.py exp5 30 0                          # <exp> <ratio> <gpu>; exp6 35 likewise
-python 3_train/train_hv_exp34.py exp5 25 0 symcentric
-python 4_eval/build_hv_v3subgraph_data.py --gpu 0 --hg_ratio 35     # exp6 HV training subgraphs on augmented (HG-predicted)
-HV_DATA_DIR=../../data/oog/train/data_exp6_hv_v3a HV_TAG=_v3a python 3_train/train_hv_exp34.py exp6 30 0 symcentric
-python 4_eval/eval_hg_valid.py 0 --exp exp5,exp6 --ratios 30,35     # validation top-4 of the HG adapters (HG table)
-python 4_eval/eval_paper_hg.py 0                                    # main-pipeline HG on the OOG eval sets (PAPER_HG_DIR to override)
-python 4_eval/inference_exp34.py --exp exp5 --hg_ratio 30 --hv_ratio 25 --gpu 0 --id_set balanced --ood_set clean243 \
+python 1_train/train_hg_exp34.py exp5 30 0                          # <exp> <ratio> <gpu>; exp6 35 likewise
+python 1_train/train_hv_exp34.py exp5 25 0 symcentric
+python 2_eval/build_hv_v3subgraph_data.py --gpu 0 --hg_ratio 35     # exp6 HV training subgraphs on augmented (HG-predicted)
+HV_DATA_DIR=../../data/oog/train/data_exp6_hv_v3a HV_TAG=_v3a python 1_train/train_hv_exp34.py exp6 30 0 symcentric
+python 2_eval/eval_hg_valid.py 0 --exp exp5,exp6 --ratios 30,35     # validation top-4 of the HG adapters (HG table)
+python 2_eval/eval_paper_hg.py 0                                    # main-pipeline HG on the OOG eval sets (PAPER_HG_DIR to override)
+python 2_eval/inference_exp34.py --exp exp5 --hg_ratio 30 --hv_ratio 25 --gpu 0 --id_set balanced --ood_set clean243 \
     --hv_dir ../../models/oog/exp5_hv_r25_symcentric_Qwen2.5-7B --subgraph_method paper3hop --tau 0.005 --subgraph_format symptom --tag_suffix _sweep
-python 4_eval/inference_exp34.py --exp exp6 --hg_ratio 35 --hv_ratio 30 --gpu 0 --kg augmented --id_set balanced --ood_set clean243 \
+python 2_eval/inference_exp34.py --exp exp6 --hg_ratio 35 --hv_ratio 30 --gpu 0 --kg augmented --id_set balanced --ood_set clean243 \
     --hv_dir ../../models/oog/exp6_hv_r30_symcentric_v3a_Qwen2.5-7B --subgraph_method paper3hop --tau 0.005 --subgraph_format symptom --tag_suffix _v3a
-python 4_eval/make_hg_csv_3to1.py; python 4_eval/make_pipeline_csv.py valid; python 4_eval/make_pipeline_csv.py test
-python 4_eval/make_seed9_inference_results.py; python 4_eval/compute_relaxed_oog_recall.py; python 4_eval/make_exp6_recognition_recall.py
+python 2_eval/make_hg_csv_3to1.py; python 2_eval/make_pipeline_csv.py valid; python 2_eval/make_pipeline_csv.py test   # sweep tables -> results/oog/*.csv
+python 2_eval/make_seed9_inference_results.py; python 2_eval/compute_relaxed_oog_recall.py
 ```
 `--id_set valid --ood_set valid128` runs the validation sets used for ratio selection. The expanded graph G+
 (`data/kg/augmented`) adds 190 diseases with attributes mined from diagnostic schemas (Appendix A.2).
@@ -286,8 +286,8 @@ subsample; validation 304 + 128. Training sets (`data/oog/train/data_exp{5,6}[_h
 
 * **Not preserved:** the end-to-end runs with the retriever as HG (Table 7, Rerank O/X), the Chain-of-Diagnosis
   driver, the generative-HG adapter and the SapBERT retriever weights (the latter two are retrainable).
-* `predicted_diseases` in the HG rows (GPT-4.1-mini judge) is stored as an unordered set; its standalone Recall@1 is
-  taken from `results/hg_standalone/test_softlabel_metric_gpt_vs_qwen.json`.
+* `predicted_diseases` in the HG rows (GPT-4.1-mini judge) is stored as an unordered set, so the generative HG's
+  Recall@1 (Fig. 3) cannot be recomputed from the rows.
 
 ## Citation
 

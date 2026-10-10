@@ -1,6 +1,0 @@
-# seed=9 prevalence-matched OOG subsample (98 test / 108 valid) -- the subsample reported in HV_result.csv.
-# sampling: OOD sorted by str(hadm); np.random.default_rng(9).choice(n_OOD, n_matched, replace=False); ID kept full.
-# exact@k = gold disease in top-k (binary); relaxed@k = ANY of 190 added diseases in top-k (= "Other" analogue). Model exp6_hg35_hv30_v3a. added=190.
-split,n_OOG,exact@1,relaxed@1,exact@2,relaxed@2,exact@3,relaxed@3,exact@4,relaxed@4
-test,98,0.102,0.3265,0.1531,0.4592,0.1735,0.5102,0.1939,0.5408
-valid,108,0.1389,0.3056,0.1759,0.3611,0.2315,0.4352,0.2315,0.463

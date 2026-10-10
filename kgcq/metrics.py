@@ -1,11 +1,4 @@
-"""Evaluation metrics: Recall@k over final diagnoses and run-level aggregation.
-
-The definitions below are exactly those used for the paper's tables:
-  * recall_at_k(gold, pred, k) = |gold ∩ top-k(pred)| / |gold|
-  * for a dialogue with |gold| ground-truth diseases, recall@k is only filled for k >= |gold|
-    (a 2-disease case therefore has recall@1 = 0 by construction, which is why Recall@1 is
-    upper-bounded at 0.958 on the 275-profile test set with 23 double-disease cases).
-"""
+"""Recall@k over final diagnoses and run-level aggregation. recall@k is filled only for k >= |gold|."""
 import os
 
 from .utils import save_to_json

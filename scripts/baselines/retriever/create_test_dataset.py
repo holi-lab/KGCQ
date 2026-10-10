@@ -1,3 +1,4 @@
+"""Retriever test queries: extract the patient's symptoms from each HG test dialogue with GPT-4o-mini."""
 import json
 import os
 import sys
@@ -13,25 +14,22 @@ ROOT = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", "..", "..")
 sys.path.insert(0, ROOT)
 from kgcq.models import get_openai_response  # noqa: E402
 
-# 파일 저장용 lock
 file_lock = threading.Lock()
 
 class KnowledgeGraph:
-    """KG에서 질병과 연결된 노드들을 가져오는 클래스"""
+    """Attribute nodes linked to each disease in the KG."""
     def __init__(self, nodes_path, edges_path):
         self.nodes_df = pd.read_csv(nodes_path)
         self.edges_df = pd.read_csv(edges_path)
         
-        # disease name -> node id 매핑
         self.disease_to_id = {}
         for _, row in self.nodes_df[self.nodes_df['label'] == 'Disease'].iterrows():
             self.disease_to_id[row['name'].lower()] = row['id']
         
-        # node id -> name 매핑
         self.id_to_name = dict(zip(self.nodes_df['id'], self.nodes_df['name']))
         
     def get_disease_connected_nodes(self, disease_name):
-        """질병과 KG상에서 연결된 모든 노드들을 반환"""
+        """Return all attribute nodes linked to a disease."""
         disease_name_lower = disease_name.lower()
         
         if disease_name_lower not in self.disease_to_id:
@@ -39,18 +37,16 @@ class KnowledgeGraph:
         
         disease_id = self.disease_to_id[disease_name_lower]
         
-        # 해당 질병에 연결된 모든 노드 찾기 (caused_by 관계)
         connected_nodes = self.edges_df[
             (self.edges_df['end'] == disease_id) & 
             (self.edges_df['type'] == 'caused_by')
         ]['start'].tolist()
         
-        # 노드 이름으로 변환
         node_names = [self.id_to_name.get(node_id, '') for node_id in connected_nodes]
         return [n for n in node_names if n]
 
 def extract_symptoms_with_llm(conversation_text):
-    """LLM을 사용하여 대화에서 환자 증상 추출"""
+    """Extract the patient's symptoms from a dialogue with the LLM."""
     
     prompt = f"""Below is a conversation between a doctor and a patient. Please extract the symptoms that the patient is experiencing from this conversation.
 
@@ -88,7 +84,7 @@ Please respond in JSON format:
         return "", ""
 
 def load_existing_results(output_path):
-    """기존 결과 파일 로드"""
+    """Load existing results."""
     if os.path.exists(output_path):
         try:
             with open(output_path, 'r', encoding='utf-8') as f:
@@ -98,24 +94,21 @@ def load_existing_results(output_path):
     return {}
 
 def save_result(output_path, data):
-    """결과를 파일에 저장 (thread-safe)"""
+    """Save results (thread-safe)."""
     with file_lock:
         with open(output_path, 'w', encoding='utf-8') as f:
             json.dump(data, f, indent=2, ensure_ascii=False)
 
 def process_test_sample(args):
-    """단일 테스트 샘플 처리"""
+    """Process one test sample."""
     sample, kg, existing_results = args
     
     patient_id = sample['patient_id']
     
-    # 이미 처리된 샘플인지 확인
     if patient_id in existing_results:
         return None
     
-    # prompt에서 대화 부분 추출
     prompt = sample['prompt']
-    # "Conversation:\n" 이후, "\n\nBased on" 이전까지가 대화
     conversation_start = prompt.find("Conversation:\n")
     conversation_end = prompt.find("\n\nBased on")
     
@@ -124,22 +117,18 @@ def process_test_sample(args):
     
     conversation_text = prompt[conversation_start + len("Conversation:\n"):conversation_end]
     
-    # LLM으로 증상 추출
     chiefcomplaint, present_illness_positive = extract_symptoms_with_llm(conversation_text)
     
     if not chiefcomplaint and not present_illness_positive:
         return None
     
-    # ground_truth 질병들
     ground_truth_diseases = sample.get('true_labels', [])
     
-    # ground_truth 질병들에 연결된 KG 노드들 수집
     ground_truth_symptoms = set()
     for disease in ground_truth_diseases:
         connected_nodes = kg.get_disease_connected_nodes(disease)
         ground_truth_symptoms.update(connected_nodes)
     
-    # 결과 데이터 반환 (dict 수정하지 않음)
     return {
         "patient_id": patient_id,
         "ground_truth": ground_truth_diseases,
@@ -149,17 +138,7 @@ def process_test_sample(args):
     }
 
 def create_test_dataset(input_path, output_path, kg_nodes_path, kg_edges_path, max_workers=10, max_samples=None):
-    """
-    test_predictions.json에서 대화를 추출하고 LLM으로 증상을 뽑아 테스트 데이터셋 생성
-    
-    Args:
-        input_path: test_predictions.json 경로
-        output_path: 출력 JSON 파일 경로
-        kg_nodes_path: KG nodes.csv 경로
-        kg_edges_path: KG edges.csv 경로
-        max_workers: 병렬 처리 워커 수
-        max_samples: 처리할 최대 샘플 수 (None이면 제한 없음)
-    """
+    """Extract the dialogues from test_predictions.json and build the test queries with the LLM."""
     print(f"Loading data from {input_path}...")
     with open(input_path, 'r', encoding='utf-8') as f:
         data = json.load(f)
@@ -167,11 +146,9 @@ def create_test_dataset(input_path, output_path, kg_nodes_path, kg_edges_path, m
     print(f"Loading KG from {kg_nodes_path}, {kg_edges_path}...")
     kg = KnowledgeGraph(kg_nodes_path, kg_edges_path)
     
-    # 기존 결과 로드
     print(f"Loading existing results from {output_path}...")
     existing_results = load_existing_results(output_path)
     
-    # 처리할 작업 목록 생성
     tasks = []
     total_existing = len(existing_results)
     
@@ -182,13 +159,11 @@ def create_test_dataset(input_path, output_path, kg_nodes_path, kg_edges_path, m
         if not patient_id:
             continue
         
-        # 이미 처리된 샘플 건너뛰기
         if patient_id in existing_results:
             continue
         
         tasks.append((sample, kg, existing_results))
         
-        # max_samples 제한
         if max_samples is not None and len(tasks) >= max_samples:
             break
     
@@ -199,7 +174,6 @@ def create_test_dataset(input_path, output_path, kg_nodes_path, kg_edges_path, m
         print("All samples already processed!")
         return
     
-    # 멀티스레딩으로 병렬 처리
     print(f"Processing with {max_workers} workers...")
     processed_results = []
     
@@ -211,7 +185,6 @@ def create_test_dataset(input_path, output_path, kg_nodes_path, kg_edges_path, m
             if result is not None:
                 processed_results.append(result)
     
-    # 기존 결과와 새 결과 병합
     print(f"\nMerging {len(processed_results)} new results with existing data...")
     final_results = existing_results.copy()
     
@@ -226,7 +199,6 @@ def create_test_dataset(input_path, output_path, kg_nodes_path, kg_edges_path, m
             "ground_truth_symptoms": result['ground_truth_symptoms']
         }
     
-    # 최종 결과 저장
     print(f"Saving final results to {output_path}...")
     save_result(output_path, final_results)
     

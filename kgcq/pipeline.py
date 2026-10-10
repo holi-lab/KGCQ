@@ -1,14 +1,5 @@
-"""Conversational diagnosis loops.
-
-All managers share the same turn structure (paper Fig. 2):
-    patient utterance -> [HG: disease probabilities] -> [subgraph extraction] -> HV: <question> or <diagnosis>
-and the same bookkeeping: ``pure_messages`` (the plain dialogue) and ``messages`` (full trace with HG output,
-subgraph lines and the HV's raw <think>... response).
-
-ConversationalDiagnosis   KGCQ (kg_extract_type="3hop"), "+KG only" ablation ("2hop"), "1hop" variant.
-NoKGDiagnosis             parametric-knowledge-only baseline (no HG, no graph).
-GenerativeHGDiagnosis     generative Hypothesis Generator baseline (Appendix C.1).
-SyntheticDialogueGenerator gold-conditioned clinician + simulator for training-data generation (Sec. 3.5.1).
+"""Conversational diagnosis loops: KGCQ (ConversationalDiagnosis), the KG-only and no-KG ablations, the
+generative-HG baseline, and the synthetic dialogue generator.
 """
 import random
 

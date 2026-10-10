@@ -1,10 +1,5 @@
-"""LLM wrappers used by the pipeline.
-
-get_openai_response / get_openrouter_response : API chat models (patient simulator, baselines, judges);
-                                                 GPT models are called through Azure OpenAI Service
-CausalLanguageModel                            : local HF causal LM (+ optional LoRA adapter) for the HV
-EmbeddingModel                                 : SentenceTransformer wrapper (node matching)
-DiseaseDetector                                : Hypothesis Generator = Qwen2.5-7B-Instruct + classification head
+"""LLM wrappers: OpenAI/Azure and OpenRouter chat calls, a local causal LM (+LoRA) for the HV, sentence
+embeddings, and the classification-head Hypothesis Generator (DiseaseDetector).
 """
 import os
 import json
