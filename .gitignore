@@ -8,6 +8,7 @@ wandb/
 
 # ---- model weights (symlinks to local checkpoints; see models/README.md) ----
 models/*
+!models/README.md
 
 # ---- MIMIC-IV-derived data: cannot be redistributed (PhysioNet credentialed DUA) ----
 data/profiles/

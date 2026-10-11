@@ -179,7 +179,7 @@ if __name__ == "__main__":
     
     parser.add_argument('--model_path', type=str,
                         default=None,
-                        help='Path to trained model (if None, evaluates all models in train/)')
+                        help='Path to trained model (if None, evaluates every trained_* model under models/retriever/)')
     parser.add_argument('--gpu', type=int, default=0,
                         help='GPU number to use')
     
@@ -205,9 +205,9 @@ if __name__ == "__main__":
     if args.model_path:
         model_paths = [args.model_path]
     else:
-        model_paths = glob('./train/trained_models/trained_*')
+        model_paths = glob(os.path.join(REPO, 'models', 'retriever', 'trained_*'))
         model_paths = [p for p in model_paths if os.path.isdir(p)]
-        print(f"Found {len(model_paths)} models in train/trained_models/")
+        print(f"Found {len(model_paths)} models in models/retriever/")
     
     output_file = os.path.join(args.output_dir, f"evaluation_results_{timestamp}.txt")
     

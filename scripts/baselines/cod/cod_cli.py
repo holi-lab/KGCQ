@@ -1,4 +1,7 @@
-"""Adapted Chain-of-Diagnosis baseline: the CoD chatbot with its disease database rebuilt from our knowledge graph."""
+"""Adapted Chain-of-Diagnosis baseline: the CoD chatbot with its disease database rebuilt from our knowledge graph.
+
+  python scripts/baselines/cod/cod_cli.py --model_dir <CoD assets> --top_k 20 --confidence_threshold 0.5
+"""
 import os
 import platform
 import torch
@@ -17,9 +20,10 @@ from retrieve_utils import construct_flatindex_from_embeddings, encoder  # noqa:
 
 
 class DiagnosisChatbot():
-    def __init__(self, model_dir,confidence_threshold = 0.5):
+    def __init__(self, model_dir, confidence_threshold=0.5, top_k=3):
 
         self.max_len = 4096
+        self.top_k = top_k  # candidate diseases retrieved per turn (CoD default 3; 20 in the paper)
         self.gen_kwargs = {'max_new_tokens': 768, 'do_sample':True, 'top_p':0.7, 'temperature':0.5, 'repetition_penalty':1.1}
 
         model, tokenizer = self.load_model(model_dir)
@@ -178,9 +182,9 @@ class DiagnosisChatbot():
                     self.sym_info['false_syms'].append(sym)
             # print(self.sym_info,flush=True)
             if is_en:
-                candi = self.retriever_en.find_top_k(self.sym_info['true_syms'], self.sym_info['false_syms'])
+                candi = self.retriever_en.find_top_k(self.sym_info['true_syms'], self.sym_info['false_syms'], k=self.top_k)
             else:
-                candi = self.retriever_zh.find_top_k(self.sym_info['true_syms'], self.sym_info['false_syms'])
+                candi = self.retriever_zh.find_top_k(self.sym_info['true_syms'], self.sym_info['false_syms'], k=self.top_k)
 
             t2_str =  self.get_candidate_dis(candi,is_en)
 
@@ -275,14 +279,14 @@ class DiagnosisChatbot():
 
             if is_en:
                 if not candidate_diseases:
-                    candi = self.retriever_en.find_top_k(self.sym_info['true_syms'], self.sym_info['false_syms'])
+                    candi = self.retriever_en.find_top_k(self.sym_info['true_syms'], self.sym_info['false_syms'], k=self.top_k)
                 else:
-                    candi = self.retriever_en.find_top_k_with_candis(self.sym_info['true_syms'], self.sym_info['false_syms'],candidate_diseases)
+                    candi = self.retriever_en.find_top_k_with_candis(self.sym_info['true_syms'], self.sym_info['false_syms'], candidate_diseases, k=self.top_k)
             else:
                 if not candidate_diseases:
-                    candi = self.retriever_zh.find_top_k(self.sym_info['true_syms'], self.sym_info['false_syms'])
+                    candi = self.retriever_zh.find_top_k(self.sym_info['true_syms'], self.sym_info['false_syms'], k=self.top_k)
                 else:
-                    candi = self.retriever_zh.find_top_k_with_candis(self.sym_info['true_syms'], self.sym_info['false_syms'],candidate_diseases)
+                    candi = self.retriever_zh.find_top_k_with_candis(self.sym_info['true_syms'], self.sym_info['false_syms'], candidate_diseases, k=self.top_k)
 
             t2_str =  self.get_candidate_dis(candi,is_en)
 
@@ -344,7 +348,7 @@ def main(args):
     os_name = platform.system()
     clear_command = 'cls' if os_name == 'Windows' else 'clear'
     
-    chatbot = DiagnosisChatbot(args.model_dir,confidence_threshold = 0.5)
+    chatbot = DiagnosisChatbot(args.model_dir, confidence_threshold=args.confidence_threshold, top_k=args.top_k)
 
     pre_string = "DiagnosisGPT: Hello! I'm a large language model designed for disease diagnosis. Please tell me about your symptoms. Type 'clear' to reset the dialogue history, or 'stop' to end the session."
     print(pre_string)
@@ -368,5 +372,7 @@ def main(args):
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
     parser.add_argument("--model_dir", type=str, default="")
+    parser.add_argument("--top_k", type=int, default=3, help="candidate diseases retrieved per turn (CoD default 3; 20 in the paper)")
+    parser.add_argument("--confidence_threshold", type=float, default=0.5, help="diagnose when the max confidence exceeds this (CoD default 0.5)")
     args = parser.parse_args()
     main(args)

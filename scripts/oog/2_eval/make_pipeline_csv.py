@@ -15,6 +15,8 @@ HVS = [0, 5, 10, 15, 20, 25, 30, 35]
 
 def main():
     split = sys.argv[1] if len(sys.argv) > 1 else 'valid'
+    if split in ('-h', '--help'):
+        print(__doc__); sys.exit(0)
     if split not in ('valid', 'test'):
         sys.exit(f'usage: make_pipeline_csv.py [valid|test]  (got {split!r})')
     tag = 'validid' if split == 'valid' else 'bal'

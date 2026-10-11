@@ -84,7 +84,7 @@ except CoD share the same HG and graph).
 | Qwen2.5-7B-Instruct (base) + KG + HG | 0.173 | 0.218 | 0.218 | 0.222 | 12.4 |
 | **KGCQ (ours)** | 0.250 | **0.361** | **0.394** | **0.418** | 6.9 |
 
-Out-of-graph diseases (Sec. 6.6): adding an "Other" node lets the system flag out-of-graph cases (test OOG Recall@4
+Out-of-graph diseases (Sec. 5.6): adding an "Other" node lets the system flag out-of-graph cases (test OOG Recall@4
 0.898) at some cost to in-graph accuracy, while expanding the graph to 528 diseases makes previously out-of-graph
 diseases diagnosable (OOG Recall@4 0.194, 0.541 when any newly added disease counts) while keeping in-graph
 Recall@4 at 0.414.
@@ -93,7 +93,7 @@ Recall@4 at 0.414.
 
 ```
 kgcq/              library: graph, subgraph extraction, HG/HV wrappers, simulator, dialogue loops, metrics
-prompts/           all prompts (HV, synthetic clinician, simulator personas, profile construction)
+prompts/           all prompts (HV, synthetic clinician, simulator personas, generative HG)
 data/kg/           the two knowledge graphs G and G+ (public); other data are MIMIC-derived and kept local
 scripts/
   1_synth/         oracle subgraphs, synthetic dialogues, HG training rows
@@ -121,8 +121,8 @@ cp .env.example .env                                       # API keys
   `AZURE_OPENAI_API_VERSION` and `AZURE_OPENAI_DEPLOYMENTS` (JSON map from the model ids used in the code to your
   deployment names). `KGCQ_OPENAI_PROVIDER=openai` switches to api.openai.com. The Claude / Gemini / Llama /
   Qwen-72B baselines use `OPENROUTER_API_KEY`.
-* Base models `Qwen/Qwen2.5-7B-Instruct` and `all-MiniLM-L6-v2` are loaded from the Hugging Face Hub (local copies
-  may be linked under `models/base`).
+* Base models `Qwen/Qwen2.5-7B-Instruct` and `all-MiniLM-L6-v2` are loaded from the Hugging Face Hub (a local copy
+  can be passed with `--model_id` / `--hv_model` / `--hg_base`; the out-of-graph scripts also look under `models/base`).
 * Checkpoints are expected at `models/hg_qwen2.5-7b_clf_head` (HG, merged classifier) and
   `models/hv_qwen2.5-7b_sft_lora` (HV LoRA adapter); the out-of-graph adapters under `models/oog/`.
 * One 80 GB GPU is enough for inference (HG + HV about 30 GB) and HG training (about 2.7 h); HV training takes
@@ -160,15 +160,15 @@ Dialogue files: `{pid: {"ground_truth", "subgraph", "<chief complaint>": {"diagn
 
 | File | Used by |
 |---|---|
-| `prompts/hv_doctor.txt` | Hypothesis Verifier, inference and SFT (Appendix J) |
+| `prompts/hv_doctor.txt` | Hypothesis Verifier, inference and SFT (Appendix H) |
 | `prompts/hv_doctor_no_kg.txt` | parametric-knowledge-only baseline |
-| `prompts/synth_doctor_gold.txt` | gold-conditioned clinician for synthetic dialogues (`{gold_disease}`, `{relevance_score}` = gamma; Appendices B, G) |
+| `prompts/synth_doctor_gold.txt` | gold-conditioned clinician for synthetic dialogues (`{gold_disease}`, `{relevance_score}` = gamma; Appendices B, E) |
 | `prompts/synth_doctor_gold_oog_other.txt` | same for out-of-graph profiles ("Other" forced first) |
-| `prompts/hg_generative.txt` | generative HG baseline (Appendix C.1) |
-| `prompts/patientsim/patient_low_specificity.txt`, `persona.json` | our simulator: PatientSim template + low-specificity components (Appendix H) |
-| `prompts/patientsim/patient_original_patientsim.txt` | original PatientSim (baseline simulator, Sec. 6.3) |
+| `prompts/hg_generative.txt` | generative HG baseline (Appendices C.1, G) |
+| `prompts/patientsim/patient_low_specificity.txt`, `persona.json` | our simulator: PatientSim template + low-specificity components (Appendix F) |
+| `prompts/patientsim/patient_original_patientsim.txt` | original PatientSim (baseline simulator, Sec. 5.3) |
 
-The HG classifier template (Appendix I) lives in `kgcq.models.DiseaseDetector.create_prompt`; the symptom extractor
+The HG classifier template (Appendix G) lives in `kgcq.models.DiseaseDetector.create_prompt`; the symptom extractor
 of the HG-free ablation in `kgcq/symptom_extractor.py`.
 
 ### Running
@@ -198,9 +198,6 @@ python scripts/3_infer/run_dialogue.py --mode kgcq    --hv_backend openai --hv_m
 python scripts/3_infer/run_dialogue.py --mode kgcq --hv_backend openrouter --hv_model anthropic/claude-3.5-sonnet --tag kgcq_hv_claude
 python scripts/4_eval/collect_tables.py runs/*      # Recall@1-4 / turns of each run
 ```
-On a SLURM cluster, submit the launchers from the repository root (`sbatch slurm/train_hg.sh`); they locate
-the repository through `SLURM_SUBMIT_DIR`.
-
 Scoring: free-text diagnoses are mapped to graph nodes by exact match or embedding similarity > 0.9; Recall@k is
 averaged over dialogues and filled only for k >= |gold| (`kgcq/metrics.py`).
 
@@ -212,10 +209,10 @@ averaged over dialogues and filled only for k >= |gold| (`kgcq/metrics.py`).
 | Table 3 (verifiers) | `--hv_backend openrouter \| local \| local_finetuned`; CoD: `scripts/baselines/cod/` |
 | Table 4 (n, tau; HG Recall@k, Sub Recall) | `--top_k n --tau t`, then `summarize_run.py` |
 | Fig. 3 (HG architectures) | `eval_hg_standalone.py`, `scripts/baselines/retriever/retrieve_eval.py`, `plot_hg_recall.py` |
-| Fig. 5 (persona robustness) | `summarize_run.py` on three runs, `plot_robustness.py` |
-| Table 5, 9-11 (out-of-graph) | `scripts/oog/` (`inference_exp34.py`, then the table scripts in `2_eval/`) |
+| Fig. 4 (persona robustness) | `summarize_run.py` on three runs, `plot_robustness.py` |
+| Tables 5, 7, 8 (out-of-graph) | `scripts/oog/` (`inference_exp34.py`, then the table scripts in `2_eval/`) |
 | Table 6 (graph statistics) | `data/kg/` (table above) |
-| Table 7 (HG methods end-to-end) | `--mode hg_generative`; retriever runs not preserved |
+| Table 9 (HG methods end-to-end) | `--mode hg_generative`; retriever runs not preserved |
 
 Each run directory under `runs/` ends with `metrics.json` (Recall@1-4, turns) and, after `summarize_run.py`,
 `metrics_anal.json` (per-persona recall, HG Recall@k, Sub Recall, subgraph size).
@@ -246,8 +243,8 @@ as expected from the sensitivity of this trade-off to the training OOG ratio (Ap
 ### Out-of-graph study
 
 "Other" node = `exp5` (HG labels 338 + Other, graph `original`), KG augmentation = `exp6` (528 labels, inference on
-`augmented`); `exp3`/`exp4` are the pilot sweep. Final models: `exp5_hg_r30` + `exp5_hv_r25_symcentric`, and
-`exp6_hg_r35` + `exp6_hv_r30_symcentric_v3a`. The OOG experiments linearise subgraphs attribute-centrically
+`augmented`); `exp3`/`exp4` are the pilot sweep. Final adapters (`models/oog/`): `exp5_hg_r30_Qwen2.5-7B` + `exp5_hv_r25_symcentric_Qwen2.5-7B`,
+and `exp6_hg_r35_Qwen2.5-7B` + `exp6_hv_r30_symcentric_v3a_Qwen2.5-7B`. The OOG experiments linearise subgraphs attribute-centrically
 (`'s' is a symptom of [d1, d2]`, `fmt="symptom"`).
 
 ```bash
@@ -279,12 +276,13 @@ subsample; validation 304 + 128. Training sets (`data/oog/train/data_exp{5,6}[_h
   the encoder on (symptom query, disease attribute document) pairs; `retrieve_eval.py` reports standalone Recall@k;
   `retrieve_utils.py` implements the rerank rule `Sim(S_pos, D) - 0.3 * Sim(S_neg, D)`.
 * **Adapted Chain-of-Diagnosis** (`scripts/baselines/cod/cod_cli.py`, Appendix D): the CoD chatbot with its disease
-  database rebuilt from our graph (each candidate disease -> its 1-hop attributes in CoD's text format), retrieval
-  size 20, confidence threshold 0.5 (0.55 and 0.6 also swept). Needs the CoD model and retriever assets.
+  database rebuilt from our graph (each candidate disease -> its 1-hop attributes in CoD's text format); retrieval
+  size 20 (`--top_k`) and CoD's default confidence threshold 0.5 (`--confidence_threshold`; 0.55 and 0.6 in the
+  sensitivity analysis). Needs the CoD model and retriever assets.
 
 ### Known gaps and provenance notes
 
-* **Not preserved:** the end-to-end runs with the retriever as HG (Table 7, Rerank O/X), the Chain-of-Diagnosis
+* **Not preserved:** the end-to-end runs with the retriever as HG (Table 9, Rerank O/X), the Chain-of-Diagnosis
   driver, the generative-HG adapter and the SapBERT retriever weights (the latter two are retrainable).
 * `predicted_diseases` in the HG rows (GPT-4.1-mini judge) is stored as an unordered set, so the generative HG's
   Recall@1 (Fig. 3) cannot be recomputed from the rows.
