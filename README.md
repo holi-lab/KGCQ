@@ -55,11 +55,14 @@ confusion level) plus a *symptom specificity* trait that keeps location, charact
 aggravating/relieving factors vague, with persona-compatibility add-ons (high recall applies only to past history;
 proficient patients tend to self-diagnose; verbose patients hide missing detail behind irrelevant text). Each
 response is conditioned on the profile and the latest doctor utterance. (`prompts/patientsim/`, `kgcq/simulator.py`.)
-A faithfulness audit of 265 simulator turns found contradictions with the profile in 0.75% of turns (Gwet's AC1 = 0.98).
+A faithfulness audit of 45 KGCQ test-split dialogues (265 simulator turns) found contradictions with the profile in
+0.75% of turns (Gwet's AC1 = 0.98).
 
 **Profiles and splits.** MIMIC-IV-ED visits with clinical notes; 20,672 profiles carry a disease label and 15,252 of
-them map onto graph nodes. Stratified splits capped at 60 profiles per disease: HG 1,390 / 172 / 174, HV 1,449 / 304,
-plus the 275-profile evaluation set (252 single- and 23 double-disease cases, so Recall@1 is bounded by 0.958).
+them map onto graph nodes. Stratified splits capped at 60 training profiles per disease; after synthetic-dialogue
+generation the HG splits hold 1,371 / 172 / 172 patients (1,346 / 171 / 170 with HG training rows after the Recall@4
+filter) and the HV splits 1,439 / 304 (Table 1), plus the 275-profile evaluation set (252 single- and 23 double-disease
+cases, so Recall@1 is bounded by 0.958).
 
 **Synthetic training dialogues.** Two GPT-4o-mini instances: a clinician conditioned on the gold disease and an
 oracle subgraph, instructed to behave as if the diagnosis were unknown, and the patient simulator. A hidden
@@ -145,9 +148,9 @@ Local layout expected by the scripts (MIMIC-derived):
 | Path | Content |
 |---|---|
 | `data/profiles/{hg_train,hg_valid,hg_test,hv_train,hv_valid}.json`, `test_balanced_275.json` | profiles with persona attributes; the evaluation set yields 288 dialogues (one per chief complaint) |
-| `data/dialogues/hg_{train,valid,test}.json`, `hv_train_valid.json` | synthetic dialogues (HG: 1,371 / 172 / 172 patients; HV: 1,743 patients, 2,154 dialogues) |
+| `data/dialogues/hg_{train,valid,test}.json`, `hv_train_valid.json` | synthetic dialogues (HG: 1,371 / 172 / 172 patients; HV: 1,743 patients = 1,439 train + 304 valid, 2,154 dialogues) |
 | `data/dialogues/training_subgraph_hv_*.json` | per-patient subgraphs used when generating the HV dialogues |
-| `data/hg_softlabel/{train,valid,test}.json` | truncated histories for the HG: 8,604 / 1,051 / 1,075 rows |
+| `data/hg_softlabel/{train,valid,test}.json` | truncated histories for the HG: 8,604 / 1,051 / 1,075 rows from 1,346 / 171 / 170 patients (Recall@4 >= 0.5 filter) |
 | `data/retriever/`, `data/oog/` | retriever baseline inputs, out-of-graph study |
 
 Profile fields: `age, gender, chiefcomplaint, present_illness_positive/negative, social_history,
@@ -160,9 +163,9 @@ Dialogue files: `{pid: {"ground_truth", "subgraph", "<chief complaint>": {"diagn
 
 | File | Used by |
 |---|---|
-| `prompts/hv_doctor.txt` | Hypothesis Verifier, inference and SFT (Appendix H) |
+| `prompts/hv_doctor.txt` | Hypothesis Verifier, inference and SFT; final diagnosis of up to four diseases (Appendix H) |
 | `prompts/hv_doctor_no_kg.txt` | parametric-knowledge-only baseline |
-| `prompts/synth_doctor_gold.txt` | gold-conditioned clinician for synthetic dialogues (`{gold_disease}`, `{relevance_score}` = gamma; Appendices B, E) |
+| `prompts/synth_doctor_gold.txt` | gold-conditioned clinician for synthetic dialogues; final diagnosis of exactly four diseases (`{gold_disease}`, `{relevance_score}` = gamma; Appendices B, E) |
 | `prompts/synth_doctor_gold_oog_other.txt` | same for out-of-graph profiles ("Other" forced first) |
 | `prompts/hg_generative.txt` | generative HG baseline (Appendices C.1, G) |
 | `prompts/patientsim/patient_low_specificity.txt`, `persona.json` | our simulator: PatientSim template + low-specificity components (Appendix F) |
