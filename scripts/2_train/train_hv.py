@@ -3,7 +3,8 @@
 prompt tokens masked). Targets: a random 20% of the doctor turns plus the final turn of dialogues with
 Recall@4 >= 0.5.
 
-  python scripts/2_train/train_hv.py --train data/dialogues/hv_train_valid.json --output_dir models/hv_qwen2.5-7b_sft_lora --gpu 0
+  python scripts/2_train/train_hv.py --output_dir models/hv_qwen2.5-7b_sft_lora --gpu 0
+  # default --train: data/dialogues/hv_train.json data/dialogues/hv_valid.json (the released HV model was trained on both)
 """
 import argparse
 import os
@@ -61,7 +62,8 @@ def prepare_conversation_dataset(data, doctor_prompt, sample_ratio=5, min_recall
 
 def build_parser():
     p = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
-    p.add_argument("--train", default=str(paths.DIALOGUE_DIR / "hv_train_valid.json"))
+    p.add_argument("--train", nargs="+", default=[str(paths.DIALOGUE_DIR / "hv_train.json"), str(paths.DIALOGUE_DIR / "hv_valid.json")],
+                   help="dialogue files (pid -> {chief complaint -> dialogue}); several files are merged in the given order")
     p.add_argument("--doctor_prompt", default=str(paths.HV_DOCTOR_PROMPT))
     p.add_argument("--model_id", default=paths.BASE_LLM)
     p.add_argument("--output_dir", required=True)
@@ -100,7 +102,10 @@ def main():
     from peft import prepare_model_for_kbit_training, LoraConfig, get_peft_model
     torch.utils.checkpoint.use_reentrant = False
 
-    samples = prepare_conversation_dataset(load_json(args.train), file_to_string(args.doctor_prompt))
+    data = {}
+    for path in args.train:
+        data.update(load_json(path))
+    samples = prepare_conversation_dataset(data, file_to_string(args.doctor_prompt))
     if args.max_pairs:
         samples = samples[:args.max_pairs]
     train_dataset = Dataset.from_list(samples)

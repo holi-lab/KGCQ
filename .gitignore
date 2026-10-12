@@ -17,6 +17,7 @@ data/hg_softlabel/
 data/retriever/
 data/human_eval/
 data/oog/
+data/readme.md
 
 # ---- run outputs and result tables (not part of the code release) ----
 runs/

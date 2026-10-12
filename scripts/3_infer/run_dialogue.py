@@ -27,7 +27,7 @@ def build_parser():
     p.add_argument("--mode", default="kgcq", choices=["kgcq", "kg_only", "no_kg", "hg_generative"])
     p.add_argument("--tag", required=True, help="output folder name under --runs_dir")
     p.add_argument("--runs_dir", default=str(paths.RUN_DIR))
-    p.add_argument("--profiles", default=str(paths.PROFILE_DIR / "test_balanced_275.json"))
+    p.add_argument("--profiles", default=str(paths.PROFILE_DIR / "hv_test.json"))
     p.add_argument("--kg_nodes", default=str(paths.KG_NODES))
     p.add_argument("--kg_edges", default=str(paths.KG_EDGES))
     p.add_argument("--gpu", default="0", help="CUDA_VISIBLE_DEVICES")

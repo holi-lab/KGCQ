@@ -59,10 +59,9 @@ A faithfulness audit of 45 KGCQ test-split dialogues (265 simulator turns) found
 0.75% of turns (Gwet's AC1 = 0.98).
 
 **Profiles and splits.** MIMIC-IV-ED visits with clinical notes; 20,672 profiles carry a disease label and 15,252 of
-them map onto graph nodes. Stratified splits capped at 60 training profiles per disease; after synthetic-dialogue
-generation the HG splits hold 1,371 / 172 / 172 patients (1,346 / 171 / 170 with HG training rows after the Recall@4
-filter) and the HV splits 1,439 / 304 (Table 1), plus the 275-profile evaluation set (252 single- and 23 double-disease
-cases, so Recall@1 is bounded by 0.958).
+them map onto graph nodes. Stratified splits capped at 60 training profiles per disease give HG 1,371 / 171 / 170 and
+HV 1,439 / 304 patient profiles (Table 1), plus the 275-profile evaluation set (252 single- and 23 double-disease cases,
+so Recall@1 is bounded by 0.958).
 
 **Synthetic training dialogues.** Two GPT-4o-mini instances: a clinician conditioned on the gold disease and an
 oracle subgraph, instructed to behave as if the diagnosis were unknown, and the patient simulator. A hidden
@@ -97,7 +96,7 @@ Recall@4 at 0.414.
 ```
 kgcq/              library: graph, subgraph extraction, HG/HV wrappers, simulator, dialogue loops, metrics
 prompts/           all prompts (HV, synthetic clinician, simulator personas, generative HG)
-data/kg/           the two knowledge graphs G and G+ (public); other data are MIMIC-derived and kept local
+data/kg/           the two knowledge graphs G and G+ (public); profiles and dialogues come from the PhysioNet release
 scripts/
   1_synth/         oracle subgraphs, synthetic dialogues, HG training rows
   2_train/         train_hg.py, train_hv.py, train_hg_generative.py
@@ -134,9 +133,16 @@ cp .env.example .env                                       # API keys
 
 ### Data
 
-Everything except the knowledge graphs derives from MIMIC-IV / MIMIC-IV-ED / MIMIC-IV-Note (PhysioNet, credentialed
-access) and is not redistributed; `.gitignore` excludes it. Credentialed users can regenerate the synthetic
-dialogues from the profiles with `scripts/1_synth`, or obtain the released files from the authors.
+Everything except the knowledge graphs derives from MIMIC-IV / MIMIC-IV-ED / MIMIC-IV-Note and is not in this
+repository (`.gitignore` excludes it). The patient profiles and synthetic dialogues are released as a PhysioNet data
+package (credentialed access; link to be added). Download it and copy its contents into `data/`, next to `data/kg/`:
+
+```bash
+cp -r /path/to/<package>/* data/            # -> data/profiles/*.json, data/dialogues/*.json
+```
+
+Every default path in the scripts points at these files, so the commands below run unchanged; the HG rows and the
+retriever queries are built from the dialogues with the scripts listed under *Running*.
 
 | Knowledge graph | Diseases | Symptom / Cause / Risk-factor nodes | Edges | Role |
 |---|---|---|---|---|
@@ -147,11 +153,11 @@ Local layout expected by the scripts (MIMIC-derived):
 
 | Path | Content |
 |---|---|
-| `data/profiles/{hg_train,hg_valid,hg_test,hv_train,hv_valid}.json`, `test_balanced_275.json` | profiles with persona attributes; the evaluation set yields 288 dialogues (one per chief complaint) |
-| `data/dialogues/hg_{train,valid,test}.json`, `hv_train_valid.json` | synthetic dialogues (HG: 1,371 / 172 / 172 patients; HV: 1,743 patients = 1,439 train + 304 valid, 2,154 dialogues) |
-| `data/dialogues/training_subgraph_hv_*.json` | per-patient subgraphs used when generating the HV dialogues |
-| `data/hg_softlabel/{train,valid,test}.json` | truncated histories for the HG: 8,604 / 1,051 / 1,075 rows from 1,346 / 171 / 170 patients (Recall@4 >= 0.5 filter) |
-| `data/retriever/`, `data/oog/` | retriever baseline inputs, out-of-graph study |
+| `data/profiles/{hg_train,hg_valid,hg_test}.json`, `{hv_train,hv_valid,hv_test}.json` | profiles with persona attributes (HG 1,371 / 171 / 170, HV 1,439 / 304 / 275, Table 1); `hv_test.json` is the end-to-end evaluation set and yields 288 dialogues (one per chief complaint) |
+| `data/dialogues/hg_{train,valid,test}.json`, `hv_{train,valid}.json` | synthetic dialogues of the HG and HV profiles (HG: 2,582 / 318 / 308 dialogues; HV: 1,832 / 322 dialogues of the 1,439 / 304 profiles); each record carries the oracle subgraph given to the synthetic clinician in `subgraph` |
+| `data/dialogues/oracle_subgraph_*.json` | per-patient oracle subgraphs written by step 2a, only needed to generate new dialogues |
+| `data/hg_softlabel/{train,valid,test}.json` | truncated histories for the HG, built from the dialogues by step 2c: 8,604 / 1,051 / 1,075 rows (dialogues with Recall@4 >= 0.5; 1,346 of the 1,371 training profiles contribute); truncation points are random, so a rebuild reproduces the counts, not the exact rows |
+| `data/retriever/`, `data/oog/` | retriever queries (built by `scripts/baselines/retriever/extract_symptoms_from_dialogue.py`, `create_test_dataset.py`); out-of-graph profiles and training sets, not part of the PhysioNet release (available from the authors to credentialed users) |
 
 Profile fields: `age, gender, chiefcomplaint, present_illness_positive/negative, social_history,
 family_medical_history, medical_history, disease, disease_mapped, likelihood_rating, found_symptoms,
@@ -182,14 +188,16 @@ of the HG-free ablation in `kgcq/symptom_extractor.py`.
 | 2b Synthetic dialogues | `scripts/1_synth/generate_dialogues.py` | profiles + subgraphs -> dialogues |
 | 2c HG rows | `scripts/1_synth/build_hg_softlabel.py` | dialogues -> truncated histories (Recall@4 >= 0.5 filter) |
 | 3a HG | `scripts/2_train/train_hg.py` | rows -> classification head (LoRA r16, lr 1e-5, 10 epochs, early stop on Recall@4) |
-| 3b HV | `scripts/2_train/train_hv.py` | HV dialogues -> LoRA adapter (lr 1e-5, 2 epochs, prompt tokens masked) |
+| 3b HV | `scripts/2_train/train_hv.py` | `hv_train.json` + `hv_valid.json` -> LoRA adapter (lr 1e-5, 2 epochs, prompt tokens masked) |
 | 4 Inference | `scripts/3_infer/run_dialogue.py` | evaluation profiles -> `runs/<tag>/dialog.json`, `metrics.json` (resumable) |
 | 5 Analysis | `scripts/4_eval/summarize_run.py`, `collect_tables.py`, `plot_robustness.py`, `plot_hg_recall.py`, `eval_hg_standalone.py` | persona breakdown, HG / subgraph recall, figures |
 
 Defaults reproduce the paper (patient = gpt-4o-mini, 50-turn cap, n = 2, tau = 0.005):
 ```bash
+# HG rows from the released dialogues (step 2c); --judge gpt-4.1-mini adds the generative-HG predictions of Fig. 3 to test.json
+for s in train valid test; do python scripts/1_synth/build_hg_softlabel.py --dialogues data/dialogues/hg_$s.json --output data/hg_softlabel/$s.json; done
 python scripts/2_train/train_hg.py --output_dir models/hg_qwen2.5-7b_clf_head --gpu 0
-python scripts/2_train/train_hv.py --output_dir models/hv_qwen2.5-7b_sft_lora --gpu 0,1
+python scripts/2_train/train_hv.py --output_dir models/hv_qwen2.5-7b_sft_lora --gpu 0,1    # on data/dialogues/hv_{train,valid}.json
 # KGCQ
 python scripts/3_infer/run_dialogue.py --mode kgcq --hv_backend local_finetuned --tag kgcq_n2_tau0.005 --gpu 0
 python scripts/4_eval/summarize_run.py --run runs/kgcq_n2_tau0.005
@@ -267,9 +275,11 @@ python 2_eval/make_seed9_inference_results.py; python 2_eval/compute_relaxed_oog
 ```
 `--id_set valid --ood_set valid128` runs the validation sets used for ratio selection. The expanded graph G+
 (`data/kg/augmented`) adds 190 diseases with attributes mined from diagnostic schemas (Appendix A.2).
-Evaluation sets: ID = the 275 profiles, OOG = 243 clean test profiles reported on a 98-case prevalence-matched
-subsample; validation 304 + 128. Training sets (`data/oog/train/data_exp{5,6}[_hv][_v3a]`, HG eval sets
-`{valid,test}_combined.json`) are part of the data package. All OOG scripts share `scripts/oog/_paths.py` (data in
+Evaluation sets: ID = the 275 test / 304 validation profiles; OOG = 243 test / 128 validation profiles, of which the
+paper reports the prevalence-matched subsamples of 98 / 108 (`ood_test_seed9_98.json`, `ood_valid_seed9_108.json`,
+materialised by `make_seed9_inference_results.py`). Training sets (`data/oog/train/data_exp{5,6}[_hv][_v3a]`, HG eval sets
+`{valid,test}_combined.json`) and the OOG profiles are not part of the PhysioNet release (available from the
+authors to credentialed users). All OOG scripts share `scripts/oog/_paths.py` (data in
 `data/oog`, adapters in `models/oog`, outputs in `results/oog`).
 
 ### Baselines
@@ -287,8 +297,9 @@ subsample; validation 304 + 128. Training sets (`data/oog/train/data_exp{5,6}[_h
 
 * **Not preserved:** the end-to-end runs with the retriever as HG (Table 9, Rerank O/X), the Chain-of-Diagnosis
   driver, the generative-HG adapter and the SapBERT retriever weights (the latter two are retrainable).
-* `predicted_diseases` in the HG rows (GPT-4.1-mini judge) is stored as an unordered set, so the generative HG's
-  Recall@1 (Fig. 3) cannot be recomputed from the rows.
+* The generative-HG predictions behind Fig. 3 (`predicted_diseases`, GPT-4.1-mini judge) are not in the data
+  release; `build_hg_softlabel.py --judge gpt-4.1-mini` adds them to rebuilt rows, as an unordered set from which
+  Recall@1 cannot be recomputed.
 
 ## Citation
 

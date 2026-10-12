@@ -98,7 +98,7 @@ def hg_and_subgraph_recall(all_results):
 def main():
     ap = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
     ap.add_argument("--run", required=True, help="run directory containing dialog.json")
-    ap.add_argument("--profiles", default=str(paths.PROFILE_DIR / "test_balanced_275.json"))
+    ap.add_argument("--profiles", default=str(paths.PROFILE_DIR / "hv_test.json"))
     args = ap.parse_args()
 
     all_results = load_json(os.path.join(args.run, "dialog.json"))
